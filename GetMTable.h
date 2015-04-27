@@ -1,5 +1,9 @@
 #include "Grammer.h"
 
+typedef Express Collection;		//集合（邻接表）
+
+char Vt = {};
+
 //消除左递归
 Grammer removeLeftRecursion(Grammer G)
 {
@@ -49,23 +53,67 @@ Grammer removeLeftRecursion(Grammer G)
 }
 
 //获取FIST集合
-LinkList getFIST(Grammer G)
+Collection getFIST(Grammer G)
 {
-	LinkList frist;
+	Collection frist;
+	int i,j,k;
+	for(i=0;i<G.length;i++)
+	{
+		Express e = G.expresses->express;
+		ENode = e.data;
+		frist.ident = e.ident;
+		for(j=0;j<e.length;j++)
+		{
+			LNode n = e.data->phrase.head;
+			if(inVt(n->data))	//如果当前节点属于终结符
+			{
+				addElemCollection(frist.data->phrase,n->data);	//将当前终结符加入到集合中
+			}
+			else
+			{
+				addElemCollection(frist.data->phrase,findFrist(n->data,G));	//findFrist()查找非终结符的首个终结符
+			}
+		}
+	}
 	return frist;
 }
 
-//获取FOLLOW集合
-LinkList getFOLLOW(Grammer G)
+char findFrist(char c,Grammer G)
 {
-	LinkList follow;
+
+}
+
+//获取FOLLOW集合
+Collection getFOLLOW(Grammer G)
+{
+	Collection follow;
+	int i,j,k;
+	for(i=0;i<G.length;i++)
+	{
+		Express e = G.expresses->express;
+		ENode = e.data;
+		frist.ident = e.ident;
+		for(j=0;j<e.length;j++)
+		{
+			LNode n = e.data->phrase.tail;
+			if(inVt(n->data))	//如果当前节点属于终结符
+			{
+				addElemCollection(follow.data->phrase,n->data);	//将当前终结符加入到集合中
+			}
+			else
+			{
+				addElemCollection(follow.data->phrase,findFollow(n->data));	//findFrist()查找非终结符的首个终结符
+			}
+		}
+	}
+
 	return follow;
 }
 
 //获取SELECT集合
-LinkList getSELECT(Grammer G , LinkList frist,LinkList follow)
+Collection getSELECT(Grammer G , LinkList frist,LinkList follow)
 {
-	LinkList select;
+	Collection select;
 	return select;
 }
 
@@ -77,10 +125,11 @@ LinkList * getMTable (Grammer G)
 	//消除左递归
 	Grammer G_new = removeLeftRecursion(G);
 	//获取FIST集合
-	LinkList first = getFIST(G_new);
+	Collection first = getFIST(G_new);
 	//获取FOLLOW集合
-	LinkList follow = getFOLLOW(G_new);
+	Collection follow = getFOLLOW(G_new);
 	//获取SELECT集合
-	LinkList select = getSELECT(G_new,first,follow);
+	Collection select = getSELECT(G_new,first,follow);
+
 	return NULL;
 }
