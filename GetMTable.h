@@ -1,23 +1,24 @@
 #include "Grammer.h"
+#include "Collection.h"
 
-typedef Express Collection;		//集合（邻接表）
+char Vt[] = {'A','B','C'};
 
-char Vt = {};
+int inVt(char c)
+{
+	return 1;
+}
 
 //消除左递归
 Grammer removeLeftRecursion(Grammer G)
 {
-	int i,j;
+	int i,j,k;
 	GNode g1 = G.expresses;
 	GNode g2 = g1->next;
 	for(i=0;i<G.length;i++)
 	{
-
 		for(j=1;j<(G.length-1);j++)
 		{
-			Express e1 = g2->express;
-			Express e2 = replaceENode(g1->express,e1);		//替换g1中的e1
-
+			g1->express = replaceENode(g1->express,g2->express);	//替换g1中的e1		
 			g2 = g2->next;
 		}
 		g1 = g1->next;
@@ -28,21 +29,35 @@ Grammer removeLeftRecursion(Grammer G)
 	for(i=0;i<G.length;i++)
 	{
 		ENode p = g1->express.data;
-		for(j=0;j<e1.length;j++)	//遍历每一条文法
+		for(j=0;j<g1->express.length;j++)	//遍历每一条文法
 		{
 			LNode l = p->phrase.head;
-			for(k=0;k<p->phrase.length;k++)		//遍历每一个标示符
+			if(l->data == g1->express.ident)			//含有左递归
 			{
-				if(l->data == e1.ident)			//含有左递归
-				{
-					/* 消除左递归，具体处理过程 */
-					//  TODO:
-					Express newExpr;					//增加一条新文法
-					newExpr.ident = e1.ident+G.length;		//新标识符（E'）
-					LinkList head = copyList(p->phrase.head,k);
+				/* 消除左递归，具体处理过程 */
+				ENode q;
+				Express newExpr;					//增加一条新文法
+				LinkList list1 = copyList(l->next,p->phrase.length-1);
+				LinkList list2;
 
+				newExpr.ident = g1->express.ident+G.length;		//新标识符（E'）
+
+				insertElem(&list1 , newExpr.ident);  // S->bS'
+				newExpr = enExpress(newExpr,list1); 
+
+				insertElem(&list2,0);				//空字符
+				newExpr = enExpress(newExpr,list1);
+				G = enGrammer(G,newExpr);
+
+				// 修改原表达式
+				deleteNode(&(p->phrase),1);		// 删除字符	
+				q = g1->express.data;
+				for(k=0;k<g1->express.length;k++)  // 每一条表达式后加入S'
+				{
+					insertElem(&(q->phrase) , newExpr.ident);
+					q = q->next;
 				}
-				l = l->next;
+				break;
 			}
 			p = p->next;
 		}
@@ -52,66 +67,88 @@ Grammer removeLeftRecursion(Grammer G)
 	return G;
 }
 
+char getFristElem(char c,Grammer G)
+{
+	if(!inVt(c))		//如果是终结符
+	{
+		return c;
+	}
+	else
+	{
+		GNode g = G.expresses;
+		int i;
+		for(i=0;i<G.length;i++)
+		{
+			if(g->express.ident == c)
+			getFristElem(g->express.data->phrase.head->data,G);
+			g = g->next;
+		}
+	}
+}
+
 //获取FIST集合
 Collection getFIST(Grammer G)
 {
 	Collection frist;
-	int i,j,k;
+	int i,j;
+	GNode g = G.expresses;
 	for(i=0;i<G.length;i++)
 	{
-		Express e = G.expresses->express;
-		ENode = e.data;
-		frist.ident = e.ident;
-		for(j=0;j<e.length;j++)
+		ENode e = g->express.data;
+		LinkList list;
+		for(j=0;j<g->express.length;j++)
 		{
-			LNode n = e.data->phrase.head;
-			if(inVt(n->data))	//如果当前节点属于终结符
-			{
-				addElemCollection(frist.data->phrase,n->data);	//将当前终结符加入到集合中
-			}
-			else
-			{
-				addElemCollection(frist.data->phrase,findFrist(n->data,G));	//findFrist()查找非终结符的首个终结符
-			}
+			char c = e->phrase.head->data;
+			insertElem(&list,getFristElem(c,G));
 		}
+		frist = enCollection(frist,list);
+		g= g->next;
 	}
 	return frist;
 }
 
-char findFrist(char c,Grammer G)
+char getFollowElem(char c,Grammer G)
 {
-
+	if(!inVt(c))		//如果是终结符
+	{
+		return c;
+	}
+	else
+	{
+		GNode g = G.expresses;
+		int i;
+		for(i=0;i<G.length;i++)
+		{
+			// TODO : 未加添加#处理
+			if(g->express.ident == c)
+			getFollowElem(g->express.data->phrase.tail->data,G);
+			g = g->next;
+		}
+	}
 }
-
 //获取FOLLOW集合
 Collection getFOLLOW(Grammer G)
 {
 	Collection follow;
-	int i,j,k;
+	int i,j;
+	GNode g = G.expresses;
 	for(i=0;i<G.length;i++)
 	{
-		Express e = G.expresses->express;
-		ENode = e.data;
-		frist.ident = e.ident;
-		for(j=0;j<e.length;j++)
+		ENode e = g->express.data;
+		LinkList list;
+		for(j=0;j<g->express.length;j++)
 		{
-			LNode n = e.data->phrase.tail;
-			if(inVt(n->data))	//如果当前节点属于终结符
-			{
-				addElemCollection(follow.data->phrase,n->data);	//将当前终结符加入到集合中
-			}
-			else
-			{
-				addElemCollection(follow.data->phrase,findFollow(n->data));	//findFrist()查找非终结符的首个终结符
-			}
+			char c = e->phrase.tail->data;
+			insertElem(&list,getFristElem(c,G));
 		}
+		follow = enCollection(follow,list);
+		g= g->next;
 	}
-
 	return follow;
 }
 
 //获取SELECT集合
-Collection getSELECT(Grammer G , LinkList frist,LinkList follow)
+Collection getSELECT(Grammer G , Collection frist,Collection follow)
 {
 	Collection select;
 	return select;
@@ -130,6 +167,5 @@ LinkList * getMTable (Grammer G)
 	Collection follow = getFOLLOW(G_new);
 	//获取SELECT集合
 	Collection select = getSELECT(G_new,first,follow);
-
 	return NULL;
 }

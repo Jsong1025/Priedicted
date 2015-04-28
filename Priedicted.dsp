@@ -107,10 +107,6 @@ SOURCE=.\Grammer.h
 
 SOURCE=.\LinkList.h
 # End Source File
-# Begin Source File
-
-SOURCE=.\MTable.h
-# End Source File
 # End Group
 # Begin Group "Resource Files"
 
