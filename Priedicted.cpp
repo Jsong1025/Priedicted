@@ -48,6 +48,7 @@ bool action ()
 {
 	char X;
 	char a;
+	int step = 0;
 
 	stack<char> priedStack;		//分析栈
 	stack<char> strStack;		//剩余符号串栈
@@ -62,10 +63,14 @@ bool action ()
 	priedStack.push('#');
 	priedStack.push('E');
 
+	cout<<"-------分析过程-------"<<endl;
+	cout<<"步骤\t分析过程"<<endl;
 	a = strStack.top();
 	strStack.pop();				// 剩余符号串栈出栈
+	
 	while(true)
 	{
+		cout<<step++<<"\t";
 		
 		X = priedStack.top();
 		priedStack.pop();		//分析栈出栈
@@ -74,11 +79,14 @@ bool action ()
 		{
 			if(X == a)
 			{
+				cout<<"\""<<a<<"\" 匹配"<<endl;
+
 				a = strStack.top();
 				strStack.pop();				// 剩余符号串栈出栈
 				continue;
 			}
 			else
+				cout<<"语法错误"<<endl;
 				return false;
 		}
 		else
@@ -88,10 +96,12 @@ bool action ()
 			{
 				if(X == a)
 				{
+					cout<<"接受"<<endl;
 					return true;
 				}
 				else
 				{
+					cout<<"语法错误"<<endl;
 					return false;
 				}
 			}
@@ -101,18 +111,23 @@ bool action ()
 				string tmp = findInMTable(X,a);
 				if(tmp.empty())
 				{
+					cout<<"语法错误"<<endl;
 					return false;
-				}
-				else if(tmp == "ε")
-				{
-					continue;
 				}
 				else
 				{
-					for(int i=(tmp.size()-1);i>=0;i--)	//将tmp逆序压入分析栈中
+					cout<<X<<" -> "<<tmp<<endl;
+					if(tmp == "ε")
 					{
-						char c = tmp[i];
-						priedStack.push(c);	
+						continue;
+					}
+					else
+					{
+						for(int i=(tmp.size()-1);i>=0;i--)	//将tmp逆序压入分析栈中
+						{
+							char c = tmp[i];
+							priedStack.push(c);	
+						}
 					}
 				}
 			}
@@ -193,6 +208,7 @@ void init()
 		cout<<Vt[i]<<" ,  ";
 	}
 	cout<<"}"<<endl;
+	cout<<endl;
 }
 
 int main(int argc, char* argv[])
@@ -201,10 +217,12 @@ int main(int argc, char* argv[])
 
 	if(action ())
 	{
+		cout<<endl;
 		printf("语法正常匹配！\n");
 	}
 	else
 	{
+		cout<<endl;
 		printf("语法错误！\n");
 	}
 
