@@ -264,8 +264,9 @@ Grammer removeLeftRecursion(Grammer G)
 /*
  *	查找非终结符A的FRIST
  */
-char *getFirstChar(char A,Grammer G)
+vector<char> getFirstChar(char A,Grammer G)
 {
+	vector<char> first;
 	for(int i=0;i<G.expresses.size();i++)		//遍历每一条规则
 	{
 		Express e = G.expresses[i];
@@ -275,16 +276,17 @@ char *getFirstChar(char A,Grammer G)
 			{
 				string str = e.data[j];
 				if(findVector(Vt,str[0]) || str[0] == 0)
-					return str[0];
+					first.push_back(str[0]);
 				else
 				{
-					char c = str[0];
-					getFirstChar(c,G);
+					vector<char> f =getFirstChar(str[0],G); 
+					for(int k=0;k<f.size();k++)
+						first.push_back(f[k]);
 				}
 			}
 		}
 	}
-	return ' ';
+	return first;
 }
 
 vector<char> *getFIRST(Grammer G)
@@ -300,9 +302,9 @@ vector<char> *getFIRST(Grammer G)
 				first[i].push_back(str[0]);
 			else
 			{
-				char c = str[0];
-				c = getFirstChar(c,G);
-				first[i].push_back(c);
+				vector<char> f =getFirstChar(str[0],G); 
+				for(int k=0;k<f.size();k++)
+					first[i].push_back(f[k]);
 			}
 		}
 	}
