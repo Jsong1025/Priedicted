@@ -9,8 +9,8 @@
 #include "vector"
 using namespace std;
 
-const int row = 7;
-const int col = 6;
+const int row = 6;
+const int col = 7;
 string M[row][col];
 vector<char> Vt;			//终结符
 
@@ -32,9 +32,9 @@ string findInMTable(char X,char a)
 		char Y = *y;
 		if( Y == X)
 		{
-			for(int j=0;j<col;j++)
+			for(int j=1;j<col;j++)
 			{
-				const char *b = M[0][i].c_str();	//提取首字符
+				const char *b = M[0][j].c_str();	//提取首字符
 				char c = *b;
 				if(c == a)
 					return M[i][j];
@@ -52,19 +52,32 @@ bool action ()
 	stack<char> priedStack;		//分析栈
 	stack<char> strStack;		//剩余符号串栈
 
+	strStack.push('#');
+	strStack.push('i');
+	strStack.push('*');
+	strStack.push('i');
+	strStack.push('+');
+	strStack.push('i');
+
+	priedStack.push('#');
+	priedStack.push('E');
+
+	a = strStack.top();
+	strStack.pop();				// 剩余符号串栈出栈
 	while(true)
 	{
 		
 		X = priedStack.top();
 		priedStack.pop();		//分析栈出栈
 
-		a = strStack.top();
-		strStack.pop();			// 剩余符号串栈出栈
-
 		if(findVector(Vt,X))	//在Vt中遍历X
 		{
 			if(X == a)
+			{
+				a = strStack.top();
+				strStack.pop();				// 剩余符号串栈出栈
 				continue;
+			}
 			else
 				return false;
 		}
@@ -90,18 +103,24 @@ bool action ()
 				{
 					return false;
 				}
+				else if(tmp == "ε")
+				{
+					continue;
+				}
 				else
 				{
-					const char *c = tmp.c_str();	//提取tmp的首字符
-					char first_char = *c;
-					priedStack.push(first_char);	//压入分析栈中
+					for(int i=(tmp.size()-1);i>=0;i--)	//将tmp逆序压入分析栈中
+					{
+						char c = tmp[i];
+						priedStack.push(c);	
+					}
 				}
 			}
 		}
 	}
 }
 
-int main(int argc, char* argv[])
+void init()
 {
 	M[0][0] = "";
 	M[0][1] = "i";
@@ -112,16 +131,16 @@ int main(int argc, char* argv[])
 	M[0][6] = "#";
 
 	M[1][0] = "E";
-	M[1][1] = "TF";
+	M[1][1] = "TD";
 	M[1][2] = "";
 	M[1][3] = "";
-	M[1][4] = "TF";
+	M[1][4] = "TD";
 	M[1][5] = "";
 	M[1][6] = "";
 
-	M[2][0] = "F";
+	M[2][0] = "D";
 	M[2][1] = "";
-	M[2][2] = "+TF";
+	M[2][2] = "+TD";
 	M[2][3] = "";
 	M[2][4] = "";
 	M[2][5] = "ε";
@@ -174,8 +193,13 @@ int main(int argc, char* argv[])
 		cout<<Vt[i]<<" ,  ";
 	}
 	cout<<"}"<<endl;
+}
 
-/*	if(action ())
+int main(int argc, char* argv[])
+{
+	init();
+
+	if(action ())
 	{
 		printf("语法正常匹配！\n");
 	}
@@ -183,7 +207,7 @@ int main(int argc, char* argv[])
 	{
 		printf("语法错误！\n");
 	}
-*/
+
 	return 0;
 }
 
