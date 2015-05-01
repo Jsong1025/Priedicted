@@ -15,7 +15,7 @@ vector<char> Vt;			//终结符
  *	在链表v中查找c
  *			如果包含返回true，如果不包含返回false
  */
-bool findVector(vector<char> v , char c)
+bool inVector(vector<char> v , char c)
 {
 	for(int i=0;i<v.size();i++)
 	{
@@ -70,7 +70,7 @@ bool action (stack<char> priedStack,stack<char> strStack)
 		X = priedStack.top();
 		priedStack.pop();		//分析栈出栈
 
-		if(findVector(Vt,X))	//在Vt中遍历X
+		if(inVector(Vt,X))	//在Vt中遍历X
 		{
 			if(X == a)
 			{
@@ -277,7 +277,7 @@ vector<char> getFirstChar(char A,Grammer G)
 			{
 				string str = e.data[j];
 				// 如果为终结符或空字符
-				if(findVector(Vt,str[0]) || str[0] == 0)
+				if(inVector(Vt,str[0]) || str[0] == 0)
 					first.push_back(str[0]);
 				else
 				{
@@ -301,11 +301,13 @@ vector<char> *getFIRST(Grammer G)
 	for(int i=0;i<G.expresses.size();i++)
 	{
 		Express e = G.expresses[i];
+		first[i].push_back(e.ident);
+
 		for(int j=0;j<e.length;j++)
 		{
 			// 逐层遍历，如果生成式的首字母为终结符，或空字符。
 			string str = e.data[j];
-			if(findVector(Vt,str[0]) || str[0] == 0)
+			if(inVector(Vt,str[0]) || str[0] == 0)
 				first[i].push_back(str[0]);
 			else
 			{
@@ -320,21 +322,92 @@ vector<char> *getFIRST(Grammer G)
 	return first;
 }
 
-vector<char> getFOLLOWChar(char A,Grammer G)
+/*
+ *	查找标识符A对应的集合
+ *			A：要查找的非终结符
+ *			l：查找长度
+ *			c：集合数组
+ */
+vector<char> findVector(char A,int l,vector<char> c[])
+{
+	vector<char> f;
+	for(int i=0;i<=l;i++)
+	{
+		if(c[i][0] == A)
+			f = c[i];
+	}
+	return f;
+}
+
+vector<char> getFollowChar(char A,int x,Grammer G,vector<char> *fs)
 {
 	vector<char> follow;
+
+	for(int i=G.expresses.size()-1;i>=0;i--)
+	{
+		Express e2 = G.expresses[i];
+		for(int j=0;j<e2.length;j++)
+		{
+			string str = e2.data[j];
+
+			int n = str.find(A);		//在所有生成式右部寻找C
+			if(n == -1 || A == e2.ident)
+				continue;
+			else if(n == (str.size()-1))		//在其他产生式中找到找到，且为右部最后
+			{
+				vector<char> f = findVector(e2.ident,x,fs);
+				for(int k=1;k<f.size();k++)
+				{
+					if(f[k] != 0 && !inVector(follow,f[k]))
+						follow.push_back(f[k]);
+				}
+			}
+			else
+			{
+				if(inVector(Vt,str[n+1]))			//紧后的为终结符
+					follow.push_back(str[n+1]);
+				else			//非终结符，获取其FIRST集合
+				{
+					vector<char> f = getFirstChar(str[n+1],G);
+					for(int k=0;k<f.size();k++)
+					{
+						if(f[k] != 0 && !inVector(follow,f[k]))
+							follow.push_back(f[k]);
+					}
+					if(inVector(f,0))
+					{
+						vector<char> f = findVector(e2.ident,x,fs);
+						for(int k=1;k<f.size();k++)
+						{
+							if(f[k] != 0 && !inVector(follow,f[k]))
+								follow.push_back(f[k]);
+						}
+					}
+				}
+			}
+		}
+	}
 	return follow;
 }
+/*
+ *  获取FOLLOW集合
+ */
 vector<char> *getFOLLOW(Grammer G)
 {
 	vector<char> *follow = new vector<char>[G.expresses.size()];
 	for(int i=0;i<G.expresses.size();i++)
 	{
-		Express e = G.expresses[i];
-		for(int j=0;j<e.length;i++)
-		{
-			string str = e.data[j];
-		}
+		Express e1 = G.expresses[i];
+		char C = e1.ident;				//当前标识符
+		follow[i].push_back(C);
+
+		vector<char> f = getFollowChar(C,i,G,follow);
+		for(int l=0;l<f.size();l++)
+			follow[i].push_back(f[l]);
+
+		if(!inVector(follow[i],'#'))
+			follow[i].push_back('#');
+
 	}
 	return follow;
 }
@@ -343,6 +416,30 @@ vector<char> *getSELECT(Grammer G,vector<char> *fist,vector<char> *follow)
 {
 	vector<char> *select = new vector<char>[G.expresses.size()];
 	return select;
+}
+
+/*
+ *	打印集合
+ */
+void printCollection(vector<char> list[],Grammer G)
+{
+	for(int i=0;i<G.expresses.size();i++)
+	{
+		Express e = G.expresses[i];
+		cout<<list[i][0]<<" : ";
+		for(int j=1;j<list[i].size();j++)
+		{
+			if(list[i][j]==0)
+			{
+				cout<<"ε"<<"  ";
+			}
+			else
+			{
+				cout<<list[i][j]<<"  ";
+			}
+		}
+		cout<<endl;
+	}
 }
 
 void getMTable(Grammer G)
@@ -355,26 +452,14 @@ void getMTable(Grammer G)
 
 	//获取FIST集合
 	vector<char> *first = getFIRST(G);
-	for(int i=0;i<G.expresses.size();i++)
-	{
-		Express e = G.expresses[i];
-		cout<<e.ident<<" : ";
-		for(int j=0;j<first[i].size();j++)
-		{
-			if(first[i][j]==0)
-			{
-				cout<<"ε"<<"  ";
-			}
-			else
-			{
-				cout<<first[i][j]<<"  ";
-			}
-		}
-		cout<<endl;
-	}
+	cout<<"FIRST 集合："<<endl;
+	printCollection(first,G);
 
 	//获取FOLLOW集合
 	vector<char> *follow = getFOLLOW(G);
+	cout<<"FOLLOW 集合："<<endl;
+	printCollection(follow,G);
+
 	//获取SELECT集合
 	vector<char> *select = getSELECT(G,first,follow);
 
