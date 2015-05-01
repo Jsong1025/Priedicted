@@ -82,6 +82,24 @@ public:
 	}
 
 	/*
+	 *	删除第n条生成式
+	 */
+	string del(int n)
+	{
+		string *array = new string[length];
+		for(int i=0;i<length;i++)
+			array[i] = data[i];
+
+		length -= 1;
+		data = new string[length];
+		for(i=0;i<n;i++)
+			data[i]=array[i];
+		for(i=n;i<length;i++)
+			data[i]=array[i+1];
+		return array[n];
+	}
+
+	/*
 	 *	将生成式中的e标识符，用e中的生成数组替换
 	 */
 	void replace(Express e)
@@ -90,14 +108,17 @@ public:
 		{
 			string str = this->data[i];
 			int n = str.find(e.ident);
-			for(int j=1;j<e.length;j++)
+			if(n != -1)
 			{
-				string newStr(str);
-				newStr.replace(n,1,e.data[i]);
-				this->insert(newStr);
+				for(int j=1;j<e.length;j++)
+				{
+					string newStr(str);
+					newStr.replace(n,1,e.data[i]);
+					this->insert(newStr);
+				}
+				str.replace(n,1,e.data[0]);
+				this->data[i] = str;
 			}
-			str.replace(n,1,e.data[0]);
-			this->data[i] = str;
 		}
 	}
 	void print()
@@ -114,13 +135,10 @@ class Grammer	//文法
 {
 
 public:
-	int length;
-
 	vector<Express> expresses;	//规则集合
 
 	Grammer()
 	{
-		length = 0;
 	}
 
 	void print()

@@ -211,31 +211,49 @@ void init()
  */
 Grammer removeLeftRecursion(Grammer G)
 {
-	for(int i=0;i<G.length;i++)
+	/*
+	for(int i=0;i<G.expresses.size();i++)
 	{
 		// 替换
-		for(int j=1;j<(G.length-1);j++)
+		for(int j=1;j<(G.expresses.size()-1);j++)
 		{
 			Express e1 = G.expresses[i];
 			Express e2 = G.expresses[j];
 			e1.replace(e2);
+			G.expresses[i] = e1;
 		}
-		/*
-		while((i=findList(G[i],G[i][0])!=length)		// 在ai的表达式中查找其自身
-		{
-			// 消除左递归
-			
-			// 获取i前后面的产生式
-			head = getHead(G[i],i);
-			tail = getTail(G[i],r);
-			
-			// 替换
-			char A = G[i][r] + G.length;
-			removeRecursion(G[i],newpoint);	//修改当前表达式，并返回新的表达式
-			Gadd(G,newpoint);				//将新的表达式加入文法G中
-		}
-		*/
 	}
+	*/	
+
+	// 消除直接左递归
+	for(int i=0;i<G.expresses.size();i++)
+	{
+		Express e = G.expresses[i];
+		for(int j=0;j<e.length;j++)
+		{
+			string str = e.data[j];
+			if(str[0] == e.ident)
+			{
+				// 产生一个新规则
+				Express f(e.ident-1);
+				string *f_str = new string[2];
+
+				for(int k=0;k<e.length;k++)
+				{
+					e.data[k] += f.ident;
+				}
+
+				string tmp = e.del(j);
+				f_str[0] = string(tmp,1,tmp.length());
+				f_str[1] = "ε";
+				f.insert(f_str,2);
+				G.expresses.push_back(f);
+				
+				G.expresses[i] = e;
+			}
+		}
+	}
+	
 	return G;
 }
 
@@ -262,62 +280,35 @@ void getMTable(Grammer G)
  	
 	//消除左递归
 	Grammer G_new = removeLeftRecursion(G);
+	cout<<"新消除左递归后："<<endl;
+	G_new.print();
+
 	//获取FIST集合
 	vector<char> first = getFIST(G_new);
 	//获取FOLLOW集合
 	vector<char> follow = getFOLLOW(G_new);
 	//获取SELECT集合
 	vector<char> select = getSELECT(G_new,first,follow);
-/*
-	// 横排首行终结符
-	for(j=1;j<(Vt.lenth+1);j++)
-	{
-		M[0][j] = vt[j];
-	}
-	for(i=1;i<(G.length+1);i++)
-	{
-		M[i][0] = G[i][0];	//竖列首行非终结符
-		for(j=1;j<(Vt.lenth+1);j++)
-		{
-			if(findSELECT(select,Vt[j]))	//如果在SELECT找到了当前终结符
-			{
-				M[i][j] = G[j];		//将当前行所在文法的后半部分填入预测分析表中
-			}
-			else
-			{
-				M[i][j] = NULL;
-			}
-		}
-	}
 
-  */
 }
 
-Grammer initGrammer(Grammer G)
+Grammer initGrammer()
 {
+	Grammer G;
+
 	Express e('E');
-	string e_str = "TD";
-	e.insert(e_str);
+	string *e_str = new string[2];
+	e_str[0] = "E+T";
+	e_str[1] = "T";
+	e.insert(e_str,2);
 	G.expresses.push_back(e);
 
-	Express d('D');
-	string *d_str = new string[2];
-	d_str[0] = "+TD";
-	d_str[1] = "ε";
-	d.insert(d_str,2);
-	G.expresses.push_back(d);
-
 	Express t('T');
-	string t_str = "FS";
-	t.insert(t_str);
+	string *t_str = new string[2];
+	t_str[0] = "T*F";
+	t_str[1] = "F";
+	t.insert(t_str,2);
 	G.expresses.push_back(t);
-
-	Express s('S');
-	string *s_str = new string[2];
-	s_str[0] = "*FS";
-	s_str[1] = "ε";
-	s.insert(s_str,2);
-	G.expresses.push_back(s);
 
 	Express f('F');
 	string *f_str = new string[2];
@@ -358,10 +349,10 @@ int main(int argc, char* argv[])
 		printf("语法错误！\n");
 	}
 */
-	Grammer G;
-	G = initGrammer(G);
+	Grammer G = initGrammer();
+	cout<<"文法G："<<endl;
 	G.print();
-//	getMTable(G);
+	getMTable(G);
 
 	return 0;
 }
