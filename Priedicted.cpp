@@ -3,10 +3,7 @@
 #include "stdafx.h"
 #include "Grammer.h"
 
-#include "iostream"
-#include "string"
 #include "stack"
-#include "vector"
 using namespace std;
 
 const int row = 6;
@@ -14,6 +11,10 @@ const int col = 7;
 string M[row][col];
 vector<char> Vt;			//终结符
 
+/*
+ *	在链表v中查找c
+ *			如果包含返回true，如果不包含返回false
+ */
 bool findVector(vector<char> v , char c)
 {
 	for(int i=0;i<v.size();i++)
@@ -24,6 +25,10 @@ bool findVector(vector<char> v , char c)
 	return false;
 }
 
+/*
+ *	在预测分析表中查找指定文法
+ *			查找成功返回指定的文法字符串，查找失败返回空字符串
+ */
 string findInMTable(char X,char a)
 {
 	for(int i=0;i<row;i++)
@@ -44,24 +49,14 @@ string findInMTable(char X,char a)
 	return "";
 }
 
-bool action ()
+/*
+ *	主判断逻辑
+ */
+bool action (stack<char> priedStack,stack<char> strStack)
 {
 	char X;
 	char a;
 	int step = 0;
-
-	stack<char> priedStack;		//分析栈
-	stack<char> strStack;		//剩余符号串栈
-
-	strStack.push('#');
-	strStack.push('i');
-	strStack.push('*');
-	strStack.push('i');
-	strStack.push('+');
-	strStack.push('i');
-
-	priedStack.push('#');
-	priedStack.push('E');
 
 	cout<<"-------分析过程-------"<<endl;
 	cout<<"步骤\t分析过程"<<endl;
@@ -211,36 +206,69 @@ void init()
 	cout<<endl;
 }
 
-int main(int argc, char* argv[])
+/*
+ *	消除文法G中的左递归
+ */
+Grammer removeLeftRecursion(Grammer G)
 {
-	init();
-
-	if(action ())
+	for(int i=0;i<G.length;i++)
 	{
-		cout<<endl;
-		printf("语法正常匹配！\n");
+		// 替换
+		for(int j=1;j<(G.length-1);j++)
+		{
+			Express e1 = G.expresses[i];
+			Express e2 = G.expresses[j];
+			e1.replace(e2);
+		}
+		/*
+		while((i=findList(G[i],G[i][0])!=length)		// 在ai的表达式中查找其自身
+		{
+			// 消除左递归
+			
+			// 获取i前后面的产生式
+			head = getHead(G[i],i);
+			tail = getTail(G[i],r);
+			
+			// 替换
+			char A = G[i][r] + G.length;
+			removeRecursion(G[i],newpoint);	//修改当前表达式，并返回新的表达式
+			Gadd(G,newpoint);				//将新的表达式加入文法G中
+		}
+		*/
 	}
-	else
-	{
-		cout<<endl;
-		printf("语法错误！\n");
-	}
-
-	return 0;
+	return G;
 }
 
-/*
-LinkList getMTable(G)
+vector<char> getFIST(Grammer G)
 {
-	//消除左递归
-	Gram G_new = removeLeftRecursion(G);
-	//获取FIST集合
-	Collection fist = getFIST(G_new);
-	//获取FOLLOW集合
-	Collection follow = getFOLLOW(G_new);
-	//获取SELECT集合
-	Collection select = getSELECT(G_new,first,follow);
+	vector<char> first;
+	return first;
+}
 
+vector<char> getFOLLOW(Grammer G)
+{
+	vector<char> follow;
+	return follow;
+}
+
+vector<char> getSELECT(Grammer G,vector<char> fist,vector<char> follow)
+{
+	vector<char> select;
+	return select;
+}
+
+void getMTable(Grammer G)
+{
+ 	
+	//消除左递归
+	Grammer G_new = removeLeftRecursion(G);
+	//获取FIST集合
+	vector<char> first = getFIST(G_new);
+	//获取FOLLOW集合
+	vector<char> follow = getFOLLOW(G_new);
+	//获取SELECT集合
+	vector<char> select = getSELECT(G_new,first,follow);
+/*
 	// 横排首行终结符
 	for(j=1;j<(Vt.lenth+1);j++)
 	{
@@ -262,39 +290,78 @@ LinkList getMTable(G)
 		}
 	}
 
-}
-
-Gram removeLeftRecursion(Gram G)
-{
-	for(i=0;i<G.lenth;i++)
-	{
-		// 替换
-		for(j=1;j<(G.lenth-1);j++)
-		{
-			adjTable ai = G[j];		//表达式ai，用邻接表
-			addList(G[i],G[j][0],ai);	//在Ai中查找Aj，如果有，用Aj的表达式list代替
-
-		}
-
-		while((i=findList(G[i],G[i][0])!=length)		// 在ai的表达式中查找其自身
-		{
-			// 消除左递归
-			
-			// 获取i前后面的产生式
-			head = getHead(G[i],i);
-			tail = getTail(G[i],r);
-			
-			// 替换
-			char A = G[i][r] + G.length;
-			removeRecursion(G[i],newpoint);	//修改当前表达式，并返回新的表达式
-			Gadd(G,newpoint);				//将新的表达式加入文法G中
-		}
-	}
-}
-
-Collection getFIST(G_new)
-{
-
-}
-
   */
+}
+
+Grammer initGrammer(Grammer G)
+{
+	Express e('E');
+	string e_str = "TD";
+	e.insert(e_str);
+	G.expresses.push_back(e);
+
+	Express d('D');
+	string *d_str = new string[2];
+	d_str[0] = "+TD";
+	d_str[1] = "ε";
+	d.insert(d_str,2);
+	G.expresses.push_back(d);
+
+	Express t('T');
+	string t_str = "FS";
+	t.insert(t_str);
+	G.expresses.push_back(t);
+
+	Express s('S');
+	string *s_str = new string[2];
+	s_str[0] = "*FS";
+	s_str[1] = "ε";
+	s.insert(s_str,2);
+	G.expresses.push_back(s);
+
+	Express f('F');
+	string *f_str = new string[2];
+	f_str[0] = "i";
+	f_str[1] = "(E)";
+	f.insert(f_str,2);
+	G.expresses.push_back(f);
+
+	return G;
+}
+
+int main(int argc, char* argv[])
+{
+/*
+	init();
+
+	stack<char> priedStack;		//分析栈
+	stack<char> strStack;		//剩余符号串栈
+
+	strStack.push('#');
+	strStack.push('i');
+	strStack.push('*');
+	strStack.push('i');
+	strStack.push('+');
+	strStack.push('i');
+
+	priedStack.push('#');
+	priedStack.push('E');
+
+	if(action (priedStack,strStack))
+	{
+		cout<<endl;
+		printf("语法正常匹配！\n");
+	}
+	else
+	{
+		cout<<endl;
+		printf("语法错误！\n");
+	}
+*/
+	Grammer G;
+	G = initGrammer(G);
+	G.print();
+//	getMTable(G);
+
+	return 0;
+}
