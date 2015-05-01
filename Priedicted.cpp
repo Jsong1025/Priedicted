@@ -9,8 +9,8 @@
 #include "vector"
 using namespace std;
 
-const int row = 5;
-const int col = 5;
+const int row = 7;
+const int col = 6;
 string M[row][col];
 vector<char> Vt;			//ÖÕ½á·û
 
@@ -103,8 +103,79 @@ bool action ()
 
 int main(int argc, char* argv[])
 {
+	M[0][0] = "";
+	M[0][1] = "i";
+	M[0][2] = "+";
+	M[0][3] = "*";
+	M[0][4] = "(";
+	M[0][5] = ")";
+	M[0][6] = "#";
 
-	if(action ())
+	M[1][0] = "E";
+	M[1][1] = "TF";
+	M[1][2] = "";
+	M[1][3] = "";
+	M[1][4] = "TF";
+	M[1][5] = "";
+	M[1][6] = "";
+
+	M[2][0] = "F";
+	M[2][1] = "";
+	M[2][2] = "+TF";
+	M[2][3] = "";
+	M[2][4] = "";
+	M[2][5] = "¦Å";
+	M[2][6] = "¦Å";
+
+	M[3][0] = "T";
+	M[3][1] = "FS";
+	M[3][2] = "";
+	M[3][3] = "";
+	M[3][4] = "FS";
+	M[3][5] = "";
+	M[3][6] = "";
+
+	M[4][0] = "S";
+	M[4][1] = "";
+	M[4][2] = "¦Å";
+	M[4][3] = "*FS";
+	M[4][4] = "";
+	M[4][5] = "¦Å";
+	M[4][6] = "¦Å";
+
+	M[5][0] = "F";
+	M[5][1] = "i";
+	M[5][2] = "";
+	M[5][3] = "";
+	M[5][4] = "(E)";
+	M[5][5] = "";
+	M[5][6] = "";
+
+	Vt.push_back('i');
+	Vt.push_back('+');
+	Vt.push_back('*');
+	Vt.push_back('(');
+	Vt.push_back(')');
+
+	for(int i=0;i<row;i++)
+	{
+		for(int j=0;j<col;j++)
+			if(M[i][j].empty())
+				cout<<" \t";
+			else
+				cout<<M[i][j]<<"\t";
+		cout<<endl;
+	}
+	cout<<endl;
+
+	cout<<"Vt = { ";
+	for(i=0;i<Vt.size();i++)
+	{
+		cout<<Vt[i]<<" ,  ";
+	}
+	cout<<"}"<<endl;
+
+/*	if(action ())
 	{
 		printf("Óï·¨Õý³£Æ¥Åä£¡\n");
 	}
@@ -112,6 +183,7 @@ int main(int argc, char* argv[])
 	{
 		printf("Óï·¨´íÎó£¡\n");
 	}
+*/
 	return 0;
 }
 
