@@ -262,7 +262,8 @@ Grammer removeLeftRecursion(Grammer G)
 }
 
 /*
- *	查找非终结符A的FRIST
+ *	查找非终结符A的所有FRIST字符集合
+ *			返回char类型的vector集合
  */
 vector<char> getFirstChar(char A,Grammer G)
 {
@@ -275,10 +276,12 @@ vector<char> getFirstChar(char A,Grammer G)
 			for(int j=0;j<e.length;j++)			//遍历每一条生成式
 			{
 				string str = e.data[j];
+				// 如果为终结符或空字符
 				if(findVector(Vt,str[0]) || str[0] == 0)
 					first.push_back(str[0]);
 				else
 				{
+					//递归查询，并把查询结果压入结果集中
 					vector<char> f =getFirstChar(str[0],G); 
 					for(int k=0;k<f.size();k++)
 						first.push_back(f[k]);
@@ -289,6 +292,9 @@ vector<char> getFirstChar(char A,Grammer G)
 	return first;
 }
 
+/*
+ *	获取语法G的FIRST集合
+ */
 vector<char> *getFIRST(Grammer G)
 {
 	vector<char> *first = new vector<char>[G.expresses.size()];
@@ -297,11 +303,13 @@ vector<char> *getFIRST(Grammer G)
 		Express e = G.expresses[i];
 		for(int j=0;j<e.length;j++)
 		{
+			// 逐层遍历，如果生成式的首字母为终结符，或空字符。
 			string str = e.data[j];
 			if(findVector(Vt,str[0]) || str[0] == 0)
 				first[i].push_back(str[0]);
 			else
 			{
+				//递归查询，并把查询结果压入当前FIRST集中
 				vector<char> f =getFirstChar(str[0],G); 
 				for(int k=0;k<f.size();k++)
 					first[i].push_back(f[k]);
@@ -312,9 +320,22 @@ vector<char> *getFIRST(Grammer G)
 	return first;
 }
 
+vector<char> getFOLLOWChar(char A,Grammer G)
+{
+	vector<char> follow;
+	return follow;
+}
 vector<char> *getFOLLOW(Grammer G)
 {
 	vector<char> *follow = new vector<char>[G.expresses.size()];
+	for(int i=0;i<G.expresses.size();i++)
+	{
+		Express e = G.expresses[i];
+		for(int j=0;j<e.length;i++)
+		{
+			string str = e.data[j];
+		}
+	}
 	return follow;
 }
 
