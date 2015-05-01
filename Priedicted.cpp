@@ -16,11 +16,31 @@ vector<char> Vt;			//终结符
 
 bool findVector(vector<char> v , char c)
 {
-	return true;
+	for(int i=0;i<v.size();i++)
+	{
+		if(c == v[i])
+			return true; 
+	}
+	return false;
 }
 
 string findInMTable(char X,char a)
 {
+	for(int i=0;i<row;i++)
+	{
+		const char *y = M[i][0].c_str();	//提取首字符
+		char Y = *y;
+		if( Y == X)
+		{
+			for(int j=0;j<col;j++)
+			{
+				const char *b = M[0][i].c_str();	//提取首字符
+				char c = *b;
+				if(c == a)
+					return M[i][j];
+			}
+		}
+	}
 	return "";
 }
 
@@ -36,9 +56,10 @@ bool action ()
 	{
 		
 		X = priedStack.top();
-		priedStack.pop();
+		priedStack.pop();		//分析栈出栈
+
 		a = strStack.top();
-		strStack.pop();
+		strStack.pop();			// 剩余符号串栈出栈
 
 		if(findVector(Vt,X))	//在Vt中遍历X
 		{
@@ -65,16 +86,16 @@ bool action ()
 			{
 				//在预测分析表中查找X和a，如果有返回链表，没有返回null
 				string tmp = findInMTable(X,a);
-				 if(tmp.empty())
-				 {
-					 return false;
-				 }
-				 else
-				 {
-					const char *c = tmp.c_str();
+				if(tmp.empty())
+				{
+					return false;
+				}
+				else
+				{
+					const char *c = tmp.c_str();	//提取tmp的首字符
 					char first_char = *c;
-					priedStack.push(first_char);
-				 }
+					priedStack.push(first_char);	//压入分析栈中
+				}
 			}
 		}
 	}
@@ -82,7 +103,15 @@ bool action ()
 
 int main(int argc, char* argv[])
 {
-	action ();
+
+	if(action ())
+	{
+		printf("语法正常匹配！\n");
+	}
+	else
+	{
+		printf("语法错误！\n");
+	}
 	return 0;
 }
 
