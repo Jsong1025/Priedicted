@@ -325,7 +325,6 @@ void Grammer::removeLeftRecursion()
 vector<char> Grammer::getFirstChar(char A)
 {
 	vector<char> first;
-	cout<<A<<endl;
 	for(int i=0;i<expresses.size();i++)		//遍历每一条规则
 	{
 		Express e = expresses[i];
@@ -381,6 +380,12 @@ vector<char> *Grammer::getFIRST()
 	return first;
 }
 
+/*
+ *	查询标识符A的FOLLOW字符集
+ *			A：	要查询的标识符
+ *			x：	当前的已经查出的FOLLOW集合的长度
+ *			fs：已经查出的FOLLOW集合
+ */
 vector<char> Grammer::getFollowChar(char A,int x,vector<char> *fs)
 {
 	vector<char> follow;
@@ -392,14 +397,14 @@ vector<char> Grammer::getFollowChar(char A,int x,vector<char> *fs)
 			string str = e2.data[j];
 
 			int n = str.find(A);		//在所有生成式右部寻找C
-			if(n == -1 || A == e2.ident)
+			if(n == -1 || A == e2.ident)		//找不到，或者生成式为其自身规则
 				continue;
 			else if(n == (str.size()-1))		//在其他产生式中找到找到，且为右部最后
 			{
 				vector<char> f = findVector(e2.ident,x,fs);
 				for(int k=1;k<f.size();k++)
 				{
-					if(f[k] != 0 && !inVector(follow,f[k]))
+					if(f[k] != 0 && !inVector(follow,f[k]))		//去除其中的空串，以及相同内容
 						follow.push_back(f[k]);
 				}
 			}
@@ -412,7 +417,7 @@ vector<char> Grammer::getFollowChar(char A,int x,vector<char> *fs)
 					vector<char> f = getFirstChar(str[n+1]);
 					for(int k=0;k<f.size();k++)
 					{
-						if(f[k] != 0 && !inVector(follow,f[k]))
+						if(f[k] != 0 && !inVector(follow,f[k]))		//去除空串与相同
 							follow.push_back(f[k]);
 					}
 					if(inVector(f,0))
@@ -430,6 +435,7 @@ vector<char> Grammer::getFollowChar(char A,int x,vector<char> *fs)
 	}
 	return follow;
 }
+
 /*
  *  获取FOLLOW集合
  */
@@ -439,22 +445,25 @@ vector<char> *Grammer::getFOLLOW()
 	for(int i=0;i<expresses.size();i++)
 	{
 		Express e1 = expresses[i];
-		char C = e1.ident;				//当前标识符
-		follow[i].push_back(C);
+		follow[i].push_back(e1.ident);
 
-		vector<char> f = getFollowChar(C,i,follow);
+		// 依次获取FOLLOW集合并存入follow中
+		vector<char> f = getFollowChar(e1.ident,i,follow);
 		for(int l=0;l<f.size();l++)
 			follow[i].push_back(f[l]);
 
-		if(!inVector(follow[i],'#'))
+		if(!inVector(follow[i],'#'))	//添加# 号
 			follow[i].push_back('#');
-
 	}
 	return follow;
 }
 
+/*
+ *  获取SELECT集合
+ */
 vector<char> *Grammer::getSELECT(vector<char> *follow)
 {
+	// SELECT集合的数组长度
 	int length = 0;
 	for(int i=0;i<expresses.size();i++)
 		length += expresses[i].length;
@@ -467,23 +476,28 @@ vector<char> *Grammer::getSELECT(vector<char> *follow)
 		Express e = expresses[i];
 		for(int j=0;j<e.length;j++)
 		{
-			char c = e.data[j][0];
-			vector<char> v = getFirstChar(c);
-			if(isEmptyStr(e.data[j]))
+			vector<char> v = getFirstChar(e.data[j][0]);	//获取生成式右部的FIRST集合
+
+			if(isEmptyStr(e.data[j]))	//如果生成式右部可以推导出空串
 			{
 				vector<char> f;
 				for(int k=0;k<expresses.size();k++)
 				{
 					if(follow[k][0] == e.ident)
-						f = follow[k];
+						f = follow[k];		//找到生成式左部的FOLLOW集合
 				}
-				for(k=0;k<v.size();k++)
+				for(k=0;k<v.size();k++)	//将FIRST集合压入
 				{
-					if(inVector(f,v[k]) && !inVector(select[n],v[k]) && v[k]!=0)
+					if(!inVector(select[n],v[k]) && v[k]!=0)
 						select[n].push_back(v[k]);
 				}
+				for(k=1;k<f.size();k++)	//将FOLLOW集合压入
+				{
+					if(!inVector(select[n],f[k]) && f[k]!=0)
+						select[n].push_back(f[k]);
+				}
 			}
-			else
+			else		//生成式右部不能推导出空串，将生成式右部的FIRST集合压入
 			{
 				for(int k=0;k<v.size();k++)
 				{

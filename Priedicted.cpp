@@ -199,11 +199,11 @@ void getMTable(Grammer G)
 			cout<<e.ident<<" -> ";
 
 			if(e.data[j][0] == 0)
-				cout<<"¦Å"<<" : ";
+				cout<<"¦Å"<<" :\t ";
 			else
-				cout<<e.data[j]<<" : ";
+				cout<<e.data[j]<<" :\t ";
 
-			for(int k=0;k<select[j].size();k++)
+			for(int k=0;k<select[n].size();k++)
 				cout<<select[n][k]<<"  ";
 			n++;
 			cout<<endl;
