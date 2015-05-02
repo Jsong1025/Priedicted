@@ -325,6 +325,7 @@ void Grammer::removeLeftRecursion()
 vector<char> Grammer::getFirstChar(char A)
 {
 	vector<char> first;
+	cout<<A<<endl;
 	for(int i=0;i<expresses.size();i++)		//遍历每一条规则
 	{
 		Express e = expresses[i];
@@ -466,7 +467,8 @@ vector<char> *Grammer::getSELECT(vector<char> *follow)
 		Express e = expresses[i];
 		for(int j=0;j<e.length;j++)
 		{
-			vector<char> v = getFirstChar(e.data[j][0]);
+			char c = e.data[j][0];
+			vector<char> v = getFirstChar(c);
 			if(isEmptyStr(e.data[j]))
 			{
 				vector<char> f;
