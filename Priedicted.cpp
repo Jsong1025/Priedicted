@@ -185,10 +185,30 @@ void getMTable(Grammer G)
 	vector<char> *follow = G.getFOLLOW();
 	cout<<"FOLLOW 集合："<<endl;
 	printCollection(follow,G.expresses.size());
-/*
+
 	//获取SELECT集合
-	vector<char> *select = getSELECT(G,first,follow);
-*/
+	vector<char> *select = G.getSELECT(follow);
+	cout<<"SELECT 集合："<<endl;
+
+	int n = 0;
+	for(int i=0;i<G.expresses.size();i++)
+	{
+		Express e = G.expresses[i];
+		for(int j=0;j<e.length;j++)
+		{
+			cout<<e.ident<<" -> ";
+
+			if(e.data[j][0] == 0)
+				cout<<"ε"<<" : ";
+			else
+				cout<<e.data[j]<<" : ";
+
+			for(int k=0;k<select[j].size();k++)
+				cout<<select[n][k]<<"  ";
+			n++;
+			cout<<endl;
+		}
+	}
 }
 
 Grammer initGrammer()

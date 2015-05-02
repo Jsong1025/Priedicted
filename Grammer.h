@@ -21,8 +21,8 @@ public:
 	//	将生成式中的e标识符，用e中的生成数组替换
 	void replace(Express e);
 
-	//  判断当前规则是否能导出空串
-	bool isEmptyStr();
+	//  判断当前规则是否能含有空串
+	bool haveEmptyStr();
 
 	void print();
 
@@ -139,10 +139,15 @@ void Express::replace(Express e)
 }
 
 /*
- *	判断当前规则是否能够导出空串
+ *	判断当前规则是否能含有空串
  */
-bool Express::isEmptyStr()
+bool Express::haveEmptyStr()
 {
+	for(int i=0;i<this->length;i++)
+	{
+		if(this->data[i][0] == 0)
+			return true;
+	}
 	return false;
 }
 
@@ -170,6 +175,13 @@ public:
 
 	void print();
 
+	// 判断某一个规则是否能够导出空串
+	bool isEmptyStr(Express e);
+	bool isEmptyStr(string str);
+
+	// 根据规则标识符查找规则
+	Express findExpress(char C);
+
 	// 消除文法G中的左递归
 	void removeLeftRecursion();
 
@@ -182,8 +194,7 @@ public:
 	vector<char> *getFOLLOW();
 
 	// 获取SELECT集合
-	vector<char> getSelectChar(string str,vector<char> *follow);
-	vector<char> *getSELECT(vector<char> *fist,vector<char> *follow);
+	vector<char> *getSELECT(vector<char> *follow);
 
 };
 
@@ -199,6 +210,60 @@ void Grammer::print()
 		expresses[i].print();
 		cout<<endl;
 	}
+}
+
+/*
+ *	根据规则标识符查找规则
+ */
+Express Grammer::findExpress(char C)
+{
+	for(int i=0;i<expresses.size();i++)
+	{
+		if(expresses[i].ident == C)
+			return expresses[i];
+	}
+	return Express();
+}
+
+/*
+ *	 判断某一个规则是否能够导出空串
+ */
+bool Grammer::isEmptyStr(Express e)
+{
+	bool result = false;
+	for(int i=0;i<e.length;i++)
+	{
+		if(e.haveEmptyStr())
+			result = true;
+		else
+		{
+			for(int j=0;j<e.data[i].size();j++)
+			{
+				Express g = findExpress(e.data[i][j]);
+				result = result && isEmptyStr(g);
+			}
+		}
+	}
+	return result;
+}
+
+/*
+ *	 判断某一个生成式是否能够导出空串
+ */
+bool Grammer::isEmptyStr(string str)
+{
+	bool result = false;
+	if(str[0] == 0)
+		result = true;
+	else
+	{
+		for(int i=0;i<str.size();i++)
+		{
+			Express e = findExpress(str[i]);
+			result = result && isEmptyStr(e);
+		}
+	}
+	return result;
 }
 	
 /*
@@ -279,8 +344,10 @@ vector<char> Grammer::getFirstChar(char A)
 						first.push_back(f[k]);
 				}
 			}
+			return first;
 		}
 	}
+	first.push_back(A);
 	return first;
 }
 
@@ -385,14 +452,7 @@ vector<char> *Grammer::getFOLLOW()
 	return follow;
 }
 
-vector<char> Grammer::getSelectChar(string str,vector<char> *follow)
-{
-	vector<char> select;
-
-	return select;
-}
-
-vector<char> *Grammer::getSELECT(vector<char> *fist,vector<char> *follow)
+vector<char> *Grammer::getSELECT(vector<char> *follow)
 {
 	int length = 0;
 	for(int i=0;i<expresses.size();i++)
@@ -406,8 +466,30 @@ vector<char> *Grammer::getSELECT(vector<char> *fist,vector<char> *follow)
 		Express e = expresses[i];
 		for(int j=0;j<e.length;j++)
 		{
-			string str = e.data[j];
-			select[n++] = getSelectChar(str,follow);
+			vector<char> v = getFirstChar(e.data[j][0]);
+			if(isEmptyStr(e.data[j]))
+			{
+				vector<char> f;
+				for(int k=0;k<expresses.size();k++)
+				{
+					if(follow[k][0] == e.ident)
+						f = follow[k];
+				}
+				for(k=0;k<v.size();k++)
+				{
+					if(inVector(f,v[k]) && !inVector(select[n],v[k]) && v[k]!=0)
+						select[n].push_back(v[k]);
+				}
+			}
+			else
+			{
+				for(int k=0;k<v.size();k++)
+				{
+					if(v[k] != 0)
+						select[n].push_back(v[k]);
+				}
+			}
+			n++;
 		}
 	}
 	return select;
