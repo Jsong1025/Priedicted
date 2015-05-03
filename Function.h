@@ -10,6 +10,29 @@ string M[row][col];
 vector<char> Vt;			//终结符
 
 /*
+ *	初始化终结符集合Vt
+ */
+void initVt(char c[],int l)
+{
+	for(int i=0;i<l;i++)
+		Vt.push_back(c[i]);
+}
+
+/*
+ *	打印终结符集合Vt
+ */
+void printVt()
+{
+	cout<<"Vt = { ";
+	for(int i=0;i<Vt.size();i++)
+	{
+		cout<<Vt[i]<<" ,  ";
+	}
+	cout<<"}"<<endl;
+	cout<<endl;
+}
+
+/*
  *	在链表v中查找c
  *			如果包含返回true，如果不包含返回false
  */

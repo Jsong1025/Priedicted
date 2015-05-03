@@ -6,25 +6,7 @@
 #include "stack"
 using namespace std;
 
-
-void initVt()
-{
-	Vt.push_back('i');
-	Vt.push_back('+');
-	Vt.push_back('*');
-	Vt.push_back('(');
-	Vt.push_back(')');
-
-	cout<<"Vt = { ";
-	for(int i=0;i<Vt.size();i++)
-	{
-		cout<<Vt[i]<<" ,  ";
-	}
-	cout<<"}"<<endl;
-	cout<<endl;
-}
-
-Grammer initGrammer()
+Grammer initGrammer(string **g,int x,int y)
 {
 	Grammer G;
 
@@ -135,30 +117,38 @@ bool action (stack<char> priedStack,stack<char> strStack)
 
 int main(int argc, char* argv[])
 {
-	initVt();		//初始化终结符集合
-
 	stack<char> priedStack;		//分析栈
 	stack<char> strStack;		//剩余符号串栈
 
-	Grammer G = initGrammer();	//初始化文法
+	char c[5] = {'i','+','*','(',')'};	//终结符集合Vt
+	string str = "i+i*i#";		//要分析的句子
+
+	const int x = 2;
+	const int y = 2;
+	string a[x][y] = {{"1","2"},{"1","2"}};
+
+	string **g = new string*[2];
+	for(int i=0;i<x;i++)
+		g[i] = a[i];
+
+	initVt(c,5);		//初始化终结符集合
+
+	for(i=(str.size()-1);i>=0;i--)
+		strStack.push(str.at(i));		//将要分析的句子逆序压入符号栈中
+
+	Grammer G = initGrammer(g,x,y);	//初始化文法
 	cout<<"文法G："<<endl;
 	G.print();
 
 	G.getMTable();		//获取预测分析表
 	printMTable();
 
-	strStack.push('#');
-	strStack.push('i');
-	strStack.push('*');
-	strStack.push('i');
-	strStack.push('+');
-	strStack.push('i');
-
-	char E = G.expresses[0].ident;
+	//将#和文法G的第一个非终结符压入分析栈
 	priedStack.push('#');
-	priedStack.push(E);
+	priedStack.push(G.expresses[0].ident);
 
-	if(action (priedStack,strStack))
+	//START
+	if(action(priedStack,strStack))
 	{
 		cout<<endl;
 		printf("语法正常匹配！\n");
