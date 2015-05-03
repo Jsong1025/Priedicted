@@ -65,24 +65,36 @@ string findInMTable(char X,char a)
 }
 
 /*
- *	打印集合
+ *	打印预测分析表
  */
-void printCollection(vector<char> list[],int length)
+void printMTable()
 {
-	for(int i=0;i<length;i++)
+	cout<<"预测分析表："<<endl;
+	for(int i=0;i<row;i++)
 	{
-		cout<<list[i][0]<<" : ";
-		for(int j=1;j<list[i].size();j++)
+		for(int j=0;j<col;j++)
+			cout<<"-------\t";
+		cout<<endl;
+		cout<<"|";
+
+		for(j=0;j<col;j++)
 		{
-			if(list[i][j]==0)
-			{
-				cout<<"ε"<<"  ";
-			}
+			if(M[i][j].empty())
+				cout<<"\t|";
 			else
 			{
-				cout<<list[i][j]<<"  ";
+				const char *b = M[i][j].c_str();	//提取首字符
+				char c = *b;
+
+				if(c == 0)
+					cout<<"  ε"<<"\t|";
+				else
+					cout<<"  "<<M[i][j]<<"\t|";
 			}
 		}
 		cout<<endl;
 	}
+	for(int j=0;j<col;j++)
+		cout<<"-------\t";
+	cout<<endl;
 }

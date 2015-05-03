@@ -7,6 +7,51 @@
 using namespace std;
 
 
+void initVt()
+{
+	Vt.push_back('i');
+	Vt.push_back('+');
+	Vt.push_back('*');
+	Vt.push_back('(');
+	Vt.push_back(')');
+
+	cout<<"Vt = { ";
+	for(int i=0;i<Vt.size();i++)
+	{
+		cout<<Vt[i]<<" ,  ";
+	}
+	cout<<"}"<<endl;
+	cout<<endl;
+}
+
+Grammer initGrammer()
+{
+	Grammer G;
+
+	Express e('E');
+	string *e_str = new string[2];
+	e_str[0] = "E+T";
+	e_str[1] = "T";
+	e.insert(e_str,2);
+	G.expresses.push_back(e);
+
+	Express t('T');
+	string *t_str = new string[2];
+	t_str[0] = "T*F";
+	t_str[1] = "F";
+	t.insert(t_str,2);
+	G.expresses.push_back(t);
+
+	Express f('F');
+	string *f_str = new string[2];
+	f_str[0] = "i";
+	f_str[1] = "(E)";
+	f.insert(f_str,2);
+	G.expresses.push_back(f);
+
+	return G;
+}
+
 /*
  *	主判断逻辑
  */
@@ -70,7 +115,7 @@ bool action (stack<char> priedStack,stack<char> strStack)
 				else
 				{
 					cout<<X<<" -> "<<tmp<<endl;
-					if(tmp == "ε")
+					if(tmp[0] == 0)		//空串
 					{
 						continue;
 					}
@@ -88,82 +133,19 @@ bool action (stack<char> priedStack,stack<char> strStack)
 	}
 }
 
-void initVt()
-{
-	Vt.push_back('i');
-	Vt.push_back('+');
-	Vt.push_back('*');
-	Vt.push_back('(');
-	Vt.push_back(')');
-
-	cout<<"Vt = { ";
-	for(int i=0;i<Vt.size();i++)
-	{
-		cout<<Vt[i]<<" ,  ";
-	}
-	cout<<"}"<<endl;
-	cout<<endl;
-}
-
-Grammer initGrammer()
-{
-	Grammer G;
-
-	Express e('E');
-	string *e_str = new string[2];
-	e_str[0] = "E+T";
-	e_str[1] = "T";
-	e.insert(e_str,2);
-	G.expresses.push_back(e);
-
-	Express t('T');
-	string *t_str = new string[2];
-	t_str[0] = "T*F";
-	t_str[1] = "F";
-	t.insert(t_str,2);
-	G.expresses.push_back(t);
-
-	Express f('F');
-	string *f_str = new string[2];
-	f_str[0] = "i";
-	f_str[1] = "(E)";
-	f.insert(f_str,2);
-	G.expresses.push_back(f);
-
-	return G;
-}
-
 int main(int argc, char* argv[])
 {
-	initVt();
+	initVt();		//初始化终结符集合
 
-	Grammer G = initGrammer();
-	cout<<"文法G："<<endl;
-	G.print();
-	G.getMTable();
-
-	for(int i=0;i<row;i++)
-	{
-		for(int j=0;j<col;j++)
-			if(M[i][j].empty())
-				cout<<" \t";
-			else
-			{
-				const char *b = M[i][j].c_str();	//提取首字符
-				char c = *b;
-
-				if(c == 0)
-					cout<<"ε"<<"\t";
-				else
-					cout<<M[i][j]<<"\t";
-			}
-		cout<<endl;
-	}
-	cout<<endl;
-
-/*
 	stack<char> priedStack;		//分析栈
 	stack<char> strStack;		//剩余符号串栈
+
+	Grammer G = initGrammer();	//初始化文法
+	cout<<"文法G："<<endl;
+	G.print();
+
+	G.getMTable();		//获取预测分析表
+	printMTable();
 
 	strStack.push('#');
 	strStack.push('i');
@@ -172,8 +154,9 @@ int main(int argc, char* argv[])
 	strStack.push('+');
 	strStack.push('i');
 
+	char E = G.expresses[0].ident;
 	priedStack.push('#');
-	priedStack.push('E');
+	priedStack.push(E);
 
 	if(action (priedStack,strStack))
 	{
@@ -185,7 +168,6 @@ int main(int argc, char* argv[])
 		cout<<endl;
 		printf("语法错误！\n");
 	}
-*/
 
 	return 0;
 }

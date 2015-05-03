@@ -86,14 +86,14 @@ void Express::insert(string str)
 		length ++;
 		data = new string[length];
 		for(i=0;i<(length-1);i++)
-			data[i]=array[i];
-		data[length-1]=str;
+			data[i] = array[i];
+		data[length-1] = str;
 	}
 	else
 	{
 		length = 1;
 		data = new string[1];
-		data[0]=str;
+		data[0] = str;
 	}
 }
 
@@ -109,9 +109,9 @@ string Express::del(int n)
 	length -= 1;
 	data = new string[length];
 	for(i=0;i<n;i++)
-		data[i]=array[i];
+		data[i] = array[i];
 	for(i=n;i<length;i++)
-		data[i]=array[i+1];
+		data[i] = array[i+1];
 	return array[n];
 }
 
@@ -196,7 +196,13 @@ public:
 	// 获取SELECT集合
 	vector<char> *getSELECT(vector<char> *follow);
 
+	// 获取文法的预测分析表
 	void getMTable();
+
+	// 打印FIRST集合或FOLLOW集合
+	void printCollection(vector<char> list[]);
+	// 打印SELECT集合
+	void printSELECT(vector<char> list[]);
 
 };
 
@@ -523,19 +529,85 @@ void Grammer::getMTable()
 	//获取FIST集合
 	vector<char> *first = getFIRST();
 	cout<<"FIRST 集合："<<endl;
-	printCollection(first,expresses.size());
+	printCollection(first);
 	cout<<endl;
 
 	//获取FOLLOW集合
 	vector<char> *follow = getFOLLOW();
 	cout<<"FOLLOW 集合："<<endl;
-	printCollection(follow,expresses.size());
+	printCollection(follow);
 	cout<<endl;
 
 	//获取SELECT集合
 	vector<char> *select = getSELECT(follow);
 	cout<<"SELECT 集合："<<endl;
-	// 输出SELECT集合
+	printSELECT(select);
+	cout<<endl;
+
+	// 生成预测分析表
+	M[0][0] = "";
+
+	for(int i=1;i<col;i++)
+		M[0][i] = Vt[i-1];		//表头终结符
+	M[0][col-1] = "#";
+
+	for(i=1;i<row;i++)
+		M[i][0] = expresses[i-1].ident; //表头非终结符
+
+	int n = 0;
+	for(i=0;i<expresses.size();i++)
+	{
+		Express e = expresses[i];
+		for(int j=1;j<col;j++)
+		{
+			M[i+1][j] = "";
+			const char *b = M[0][j].c_str();	//提取首字符
+			char c = *b;
+
+			int m = n;			//注：此处m作用为局部遍历select集合
+			for(int k=0;k<e.length;k++)
+			{
+				for(int l=0;l<select[m].size();l++)
+				{
+					if(select[m][l] == c)		//如果当前select集中含有表头终结符
+						M[i+1][j] = e.data[k];
+				}
+				m++;
+			}
+		}
+		n += e.length;
+	}
+
+}
+
+/*
+ *	打印集合(FIRST或FOLLOW)
+ */
+void Grammer::printCollection(vector<char> list[])
+{
+	for(int i=0;i<expresses.size();i++)
+	{
+		cout<<list[i][0]<<" : ";
+		for(int j=1;j<list[i].size();j++)
+		{
+			if(list[i][j]==0)
+			{
+				cout<<"ε"<<"  ";
+			}
+			else
+			{
+				cout<<list[i][j]<<"  ";
+			}
+		}
+		cout<<endl;
+	}
+}
+
+/*
+ *	打印SELECT集合
+ */
+void Grammer::printSELECT(vector<char> select[])
+{
 	int n = 0;
 	for(int i=0;i<expresses.size();i++)
 	{
@@ -556,40 +628,4 @@ void Grammer::getMTable()
 		}
 	}
 	cout<<endl;
-
-	// 生成预测分析表
-	M[0][0] = "";
-
-	for(i=1;i<col;i++)
-		M[0][i] = Vt[i-1];		//表头终结符
-	M[0][col-1] = "#";
-
-	for(i=1;i<row;i++)
-		M[i][0] = expresses[i-1].ident; //表头非终结符
-
-	n = 0;
-	for(i=0;i<expresses.size();i++)
-	{
-		Express e = expresses[i];
-		for(int j=1;j<col;j++)
-		{
-			M[i+1][j] = "";
-			const char *b = M[0][j].c_str();	//提取首字符
-			char c = *b;
-
-			int m = n;			//注：此处m作用为局部遍历select集合
-			for(int k=0;k<e.length;k++)
-			{
-				for(int l=0;l<select[m].size();l++)
-				{
-					if(select[m][l] == c)		//如果当前select集中含有表头终结符
-						M[i+1][j] = e.data[k];
-				}
-				m++;
-			}
-
-		}
-		n += e.length;
-	}
-
 }
