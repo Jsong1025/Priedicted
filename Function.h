@@ -6,6 +6,7 @@ using namespace std;
 const int row = 6;
 const int col = 7;
 string M[row][col];
+
 vector<char> Vt;			//жу╫А╥Ш
 
 /*

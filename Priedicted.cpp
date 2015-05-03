@@ -88,68 +88,8 @@ bool action (stack<char> priedStack,stack<char> strStack)
 	}
 }
 
-void init()
+void initVt()
 {
-/*
-	M[0][0] = "";
-	M[0][1] = "i";
-	M[0][2] = "+";
-	M[0][3] = "*";
-	M[0][4] = "(";
-	M[0][5] = ")";
-	M[0][6] = "#";
-
-	M[1][0] = "E";
-	M[1][1] = "TD";
-	M[1][2] = "";
-	M[1][3] = "";
-	M[1][4] = "TD";
-	M[1][5] = "";
-	M[1][6] = "";
-
-	M[2][0] = "D";
-	M[2][1] = "";
-	M[2][2] = "+TD";
-	M[2][3] = "";
-	M[2][4] = "";
-	M[2][5] = "ε";
-	M[2][6] = "ε";
-
-	M[3][0] = "T";
-	M[3][1] = "FS";
-	M[3][2] = "";
-	M[3][3] = "";
-	M[3][4] = "FS";
-	M[3][5] = "";
-	M[3][6] = "";
-
-	M[4][0] = "S";
-	M[4][1] = "";
-	M[4][2] = "ε";
-	M[4][3] = "*FS";
-	M[4][4] = "";
-	M[4][5] = "ε";
-	M[4][6] = "ε";
-
-	M[5][0] = "F";
-	M[5][1] = "i";
-	M[5][2] = "";
-	M[5][3] = "";
-	M[5][4] = "(E)";
-	M[5][5] = "";
-	M[5][6] = "";
-
-	for(int i=0;i<row;i++)
-	{
-		for(int j=0;j<col;j++)
-			if(M[i][j].empty())
-				cout<<" \t";
-			else
-				cout<<M[i][j]<<"\t";
-		cout<<endl;
-	}
-	cout<<endl;
-*/
 	Vt.push_back('i');
 	Vt.push_back('+');
 	Vt.push_back('*');
@@ -163,52 +103,6 @@ void init()
 	}
 	cout<<"}"<<endl;
 	cout<<endl;
-}
-
-
-
-
-void getMTable(Grammer G)
-{
- 	
-	//消除左递归
-	G.removeLeftRecursion();
-	cout<<"消除左递归后："<<endl;
-	G.print();
-
-	//获取FIST集合
-	vector<char> *first = G.getFIRST();
-	cout<<"FIRST 集合："<<endl;
-	printCollection(first,G.expresses.size());
-
-	//获取FOLLOW集合
-	vector<char> *follow = G.getFOLLOW();
-	cout<<"FOLLOW 集合："<<endl;
-	printCollection(follow,G.expresses.size());
-
-	//获取SELECT集合
-	vector<char> *select = G.getSELECT(follow);
-	cout<<"SELECT 集合："<<endl;
-
-	int n = 0;
-	for(int i=0;i<G.expresses.size();i++)
-	{
-		Express e = G.expresses[i];
-		for(int j=0;j<e.length;j++)
-		{
-			cout<<e.ident<<" -> ";
-
-			if(e.data[j][0] == 0)
-				cout<<"ε"<<" :\t ";
-			else
-				cout<<e.data[j]<<" :\t ";
-
-			for(int k=0;k<select[n].size();k++)
-				cout<<select[n][k]<<"  ";
-			n++;
-			cout<<endl;
-		}
-	}
 }
 
 Grammer initGrammer()
@@ -241,12 +135,31 @@ Grammer initGrammer()
 
 int main(int argc, char* argv[])
 {
-	init();
+	initVt();
 
 	Grammer G = initGrammer();
 	cout<<"文法G："<<endl;
 	G.print();
-	getMTable(G);
+	G.getMTable();
+
+	for(int i=0;i<row;i++)
+	{
+		for(int j=0;j<col;j++)
+			if(M[i][j].empty())
+				cout<<" \t";
+			else
+			{
+				const char *b = M[i][j].c_str();	//提取首字符
+				char c = *b;
+
+				if(c == 0)
+					cout<<"ε"<<"\t";
+				else
+					cout<<M[i][j]<<"\t";
+			}
+		cout<<endl;
+	}
+	cout<<endl;
 
 /*
 	stack<char> priedStack;		//分析栈
