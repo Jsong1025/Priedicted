@@ -7,10 +7,10 @@ const int row = 6;
 const int col = 7;
 string M[row][col];
 
-vector<char> Vt;			//ÖÕ½á·û
+vector<char> Vt;			//ç»ˆç»“ç¬¦
 
 /*
- *	³õÊ¼»¯ÖÕ½á·û¼¯ºÏVt
+ *	åˆå§‹åŒ–ç»ˆç»“ç¬¦é›†åˆVt
  */
 void initVt(char c[],int l)
 {
@@ -19,7 +19,7 @@ void initVt(char c[],int l)
 }
 
 /*
- *	´òÓ¡ÖÕ½á·û¼¯ºÏVt
+ *	æ‰“å°ç»ˆç»“ç¬¦é›†åˆVt
  */
 void printVt()
 {
@@ -33,8 +33,8 @@ void printVt()
 }
 
 /*
- *	ÔÚÁ´±ívÖĞ²éÕÒc
- *			Èç¹û°üº¬·µ»Øtrue£¬Èç¹û²»°üº¬·µ»Øfalse
+ *	åœ¨é“¾è¡¨vä¸­æŸ¥æ‰¾c
+ *			å¦‚æœåŒ…å«è¿”å›trueï¼Œå¦‚æœä¸åŒ…å«è¿”å›false
  */
 static bool inVector(vector<char> v , char c)
 {
@@ -47,10 +47,10 @@ static bool inVector(vector<char> v , char c)
 }
 
 /*
- *	²éÕÒ±êÊ¶·ûA¶ÔÓ¦µÄ¼¯ºÏ
- *			A£ºÒª²éÕÒµÄ·ÇÖÕ½á·û
- *			l£º²éÕÒ³¤¶È
- *			c£º¼¯ºÏÊı×é
+ *	æŸ¥æ‰¾æ ‡è¯†ç¬¦Aå¯¹åº”çš„é›†åˆ
+ *			Aï¼šè¦æŸ¥æ‰¾çš„éç»ˆç»“ç¬¦
+ *			lï¼šæŸ¥æ‰¾é•¿åº¦
+ *			cï¼šé›†åˆæ•°ç»„
  */
 vector<char> findVector(char A,int l,vector<char> c[])
 {
@@ -64,20 +64,20 @@ vector<char> findVector(char A,int l,vector<char> c[])
 }
 
 /*
- *	ÔÚÔ¤²â·ÖÎö±íÖĞ²éÕÒÖ¸¶¨ÎÄ·¨
- *			²éÕÒ³É¹¦·µ»ØÖ¸¶¨µÄÎÄ·¨×Ö·û´®£¬²éÕÒÊ§°Ü·µ»Ø¿Õ×Ö·û´®
+ *	åœ¨é¢„æµ‹åˆ†æè¡¨ä¸­æŸ¥æ‰¾æŒ‡å®šæ–‡æ³•
+ *			æŸ¥æ‰¾æˆåŠŸè¿”å›æŒ‡å®šçš„æ–‡æ³•å­—ç¬¦ä¸²ï¼ŒæŸ¥æ‰¾å¤±è´¥è¿”å›ç©ºå­—ç¬¦ä¸²
  */
 string findInMTable(char X,char a)
 {
 	for(int i=0;i<row;i++)
 	{
-		const char *y = M[i][0].c_str();	//ÌáÈ¡Ê××Ö·û
+		const char *y = M[i][0].c_str();	//æå–é¦–å­—ç¬¦
 		char Y = *y;
 		if( Y == X)
 		{
 			for(int j=1;j<col;j++)
 			{
-				const char *b = M[0][j].c_str();	//ÌáÈ¡Ê××Ö·û
+				const char *b = M[0][j].c_str();	//æå–é¦–å­—ç¬¦
 				char c = *b;
 				if(c == a)
 					return M[i][j];
@@ -88,11 +88,11 @@ string findInMTable(char X,char a)
 }
 
 /*
- *	´òÓ¡Ô¤²â·ÖÎö±í
+ *	æ‰“å°é¢„æµ‹åˆ†æè¡¨
  */
 void printMTable()
 {
-	cout<<"Ô¤²â·ÖÎö±í£º"<<endl;
+	cout<<"é¢„æµ‹åˆ†æè¡¨ï¼š"<<endl;
 	for(int i=0;i<row;i++)
 	{
 		for(int j=0;j<col;j++)
@@ -106,11 +106,11 @@ void printMTable()
 				cout<<"\t|";
 			else
 			{
-				const char *b = M[i][j].c_str();	//ÌáÈ¡Ê××Ö·û
+				const char *b = M[i][j].c_str();	//æå–é¦–å­—ç¬¦
 				char c = *b;
 
 				if(c == 0)
-					cout<<"  ¦Å"<<"\t|";
+					cout<<"  Îµ"<<"\t|";
 				else
 					cout<<"  "<<M[i][j]<<"\t|";
 			}

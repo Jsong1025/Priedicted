@@ -35,7 +35,7 @@ Grammer initGrammer(string **g,int x,int y)
 }
 
 /*
- *	Ö÷ÅĞ¶ÏÂß¼­
+ *	ä¸»åˆ¤æ–­é€»è¾‘
  */
 bool action (stack<char> priedStack,stack<char> strStack)
 {
@@ -43,30 +43,30 @@ bool action (stack<char> priedStack,stack<char> strStack)
 	char a;
 	int step = 0;
 
-	cout<<"-------·ÖÎö¹ı³Ì-------"<<endl;
-	cout<<"²½Öè\t·ÖÎö¹ı³Ì"<<endl;
+	cout<<"-------åˆ†æè¿‡ç¨‹-------"<<endl;
+	cout<<"æ­¥éª¤\tåˆ†æè¿‡ç¨‹"<<endl;
 	a = strStack.top();
-	strStack.pop();				// Ê£Óà·ûºÅ´®Õ»³öÕ»
+	strStack.pop();				// å‰©ä½™ç¬¦å·ä¸²æ ˆå‡ºæ ˆ
 	
 	while(true)
 	{
 		cout<<step++<<"\t";
 		
 		X = priedStack.top();
-		priedStack.pop();		//·ÖÎöÕ»³öÕ»
+		priedStack.pop();		//åˆ†ææ ˆå‡ºæ ˆ
 
-		if(inVector(Vt,X))	//ÔÚVtÖĞ±éÀúX
+		if(inVector(Vt,X))	//åœ¨Vtä¸­éå†X
 		{
 			if(X == a)
 			{
-				cout<<"\""<<a<<"\" Æ¥Åä"<<endl;
+				cout<<"\""<<a<<"\" åŒ¹é…"<<endl;
 
 				a = strStack.top();
-				strStack.pop();				// Ê£Óà·ûºÅ´®Õ»³öÕ»
+				strStack.pop();				// å‰©ä½™ç¬¦å·ä¸²æ ˆå‡ºæ ˆ
 				continue;
 			}
 			else
-				cout<<"Óï·¨´íÎó"<<endl;
+				cout<<"è¯­æ³•é”™è¯¯"<<endl;
 				return false;
 		}
 		else
@@ -76,34 +76,34 @@ bool action (stack<char> priedStack,stack<char> strStack)
 			{
 				if(X == a)
 				{
-					cout<<"½ÓÊÜ"<<endl;
+					cout<<"æ¥å—"<<endl;
 					return true;
 				}
 				else
 				{
-					cout<<"Óï·¨´íÎó"<<endl;
+					cout<<"è¯­æ³•é”™è¯¯"<<endl;
 					return false;
 				}
 			}
 			else
 			{
-				//ÔÚÔ¤²â·ÖÎö±íÖĞ²éÕÒXºÍa£¬Èç¹ûÓĞ·µ»ØÁ´±í£¬Ã»ÓĞ·µ»Ønull
+				//åœ¨é¢„æµ‹åˆ†æè¡¨ä¸­æŸ¥æ‰¾Xå’Œaï¼Œå¦‚æœæœ‰è¿”å›é“¾è¡¨ï¼Œæ²¡æœ‰è¿”å›null
 				string tmp = findInMTable(X,a);
 				if(tmp.empty())
 				{
-					cout<<"Óï·¨´íÎó"<<endl;
+					cout<<"è¯­æ³•é”™è¯¯"<<endl;
 					return false;
 				}
 				else
 				{
 					cout<<X<<" -> "<<tmp<<endl;
-					if(tmp[0] == 0)		//¿Õ´®
+					if(tmp[0] == 0)		//ç©ºä¸²
 					{
 						continue;
 					}
 					else
 					{
-						for(int i=(tmp.size()-1);i>=0;i--)	//½«tmpÄæĞòÑ¹Èë·ÖÎöÕ»ÖĞ
+						for(int i=(tmp.size()-1);i>=0;i--)	//å°†tmpé€†åºå‹å…¥åˆ†ææ ˆä¸­
 						{
 							char c = tmp[i];
 							priedStack.push(c);	
@@ -117,11 +117,11 @@ bool action (stack<char> priedStack,stack<char> strStack)
 
 int main(int argc, char* argv[])
 {
-	stack<char> priedStack;		//·ÖÎöÕ»
-	stack<char> strStack;		//Ê£Óà·ûºÅ´®Õ»
+	stack<char> priedStack;		//åˆ†ææ ˆ
+	stack<char> strStack;		//å‰©ä½™ç¬¦å·ä¸²æ ˆ
 
-	char c[5] = {'i','+','*','(',')'};	//ÖÕ½á·û¼¯ºÏVt
-	string str = "i+i*i#";		//Òª·ÖÎöµÄ¾ä×Ó
+	char c[5] = {'i','+','*','(',')'};	//ç»ˆç»“ç¬¦é›†åˆVt
+	string str = "i+i*i#";		//è¦åˆ†æçš„å¥å­
 
 	const int x = 2;
 	const int y = 2;
@@ -131,19 +131,19 @@ int main(int argc, char* argv[])
 	for(int i=0;i<x;i++)
 		g[i] = a[i];
 
-	initVt(c,5);		//³õÊ¼»¯ÖÕ½á·û¼¯ºÏ
+	initVt(c,5);		//åˆå§‹åŒ–ç»ˆç»“ç¬¦é›†åˆ
 
 	for(i=(str.size()-1);i>=0;i--)
-		strStack.push(str.at(i));		//½«Òª·ÖÎöµÄ¾ä×ÓÄæĞòÑ¹Èë·ûºÅÕ»ÖĞ
+		strStack.push(str.at(i));		//å°†è¦åˆ†æçš„å¥å­é€†åºå‹å…¥ç¬¦å·æ ˆä¸­
 
-	Grammer G = initGrammer(g,x,y);	//³õÊ¼»¯ÎÄ·¨
-	cout<<"ÎÄ·¨G£º"<<endl;
+	Grammer G = initGrammer(g,x,y);	//åˆå§‹åŒ–æ–‡æ³•
+	cout<<"æ–‡æ³•Gï¼š"<<endl;
 	G.print();
 
-	G.getMTable();		//»ñÈ¡Ô¤²â·ÖÎö±í
+	G.getMTable();		//è·å–é¢„æµ‹åˆ†æè¡¨
 	printMTable();
 
-	//½«#ºÍÎÄ·¨GµÄµÚÒ»¸ö·ÇÖÕ½á·ûÑ¹Èë·ÖÎöÕ»
+	//å°†#å’Œæ–‡æ³•Gçš„ç¬¬ä¸€ä¸ªéç»ˆç»“ç¬¦å‹å…¥åˆ†ææ ˆ
 	priedStack.push('#');
 	priedStack.push(G.expresses[0].ident);
 
@@ -151,12 +151,12 @@ int main(int argc, char* argv[])
 	if(action(priedStack,strStack))
 	{
 		cout<<endl;
-		printf("Óï·¨Õı³£Æ¥Åä£¡\n");
+		printf("è¯­æ³•æ­£å¸¸åŒ¹é…ï¼\n");
 	}
 	else
 	{
 		cout<<endl;
-		printf("Óï·¨´íÎó£¡\n");
+		printf("è¯­æ³•é”™è¯¯ï¼\n");
 	}
 
 	return 0;

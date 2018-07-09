@@ -1,27 +1,27 @@
 #include "Function.h"
 using namespace std;
 
-class Express	//¹æÔò
+class Express	//è§„åˆ™
 {
 public:
-	int length;		//µ±Ç°Éú³ÉÊ½¸öÊı
-	char ident;		//Éú³ÉÊ½×ó²¿
-	string *data;	//Éú³ÉÊ½ÓÒ²¿Êı
+	int length;		//å½“å‰ç”Ÿæˆå¼ä¸ªæ•°
+	char ident;		//ç”Ÿæˆå¼å·¦éƒ¨
+	string *data;	//ç”Ÿæˆå¼å³éƒ¨æ•°
 
 	Express();
 	Express(char c);
 
-	//	ÔÚ¹æÔòÖĞ²åÈëĞÂµÄÉú³ÉÊ½
+	//	åœ¨è§„åˆ™ä¸­æ’å…¥æ–°çš„ç”Ÿæˆå¼
 	void insert(string str);
 	void insert(string str[],int l);
 
-	//	É¾³ıµÚnÌõÉú³ÉÊ½
+	//	åˆ é™¤ç¬¬næ¡ç”Ÿæˆå¼
 	string del(int n);
 
-	//	½«Éú³ÉÊ½ÖĞµÄe±êÊ¶·û£¬ÓÃeÖĞµÄÉú³ÉÊı×éÌæ»»
+	//	å°†ç”Ÿæˆå¼ä¸­çš„eæ ‡è¯†ç¬¦ï¼Œç”¨eä¸­çš„ç”Ÿæˆæ•°ç»„æ›¿æ¢
 	void replace(Express e);
 
-	//  ÅĞ¶Ïµ±Ç°¹æÔòÊÇ·ñÄÜº¬ÓĞ¿Õ´®
+	//  åˆ¤æ–­å½“å‰è§„åˆ™æ˜¯å¦èƒ½å«æœ‰ç©ºä¸²
 	bool haveEmptyStr();
 
 	void print();
@@ -43,9 +43,9 @@ Express::Express(char c)
 }
 
 /*
- *	ÔÚ¹æÔòÖĞ²åÈëĞÂµÄÉú³ÉÊ½£¨¶àÌõ£©
- *		str :	Òª²åÈëµÄÉú³ÉÊ½Êı×é
- *		l   :	Òª²åÈëµÄ³¤¶È
+ *	åœ¨è§„åˆ™ä¸­æ’å…¥æ–°çš„ç”Ÿæˆå¼ï¼ˆå¤šæ¡ï¼‰
+ *		str :	è¦æ’å…¥çš„ç”Ÿæˆå¼æ•°ç»„
+ *		l   :	è¦æ’å…¥çš„é•¿åº¦
  */
 void Express::insert(string str[],int l)
 {
@@ -72,8 +72,8 @@ void Express::insert(string str[],int l)
 }
 
 /*
- *	ÔÚ¹æÔòÖĞ²åÈëĞÂµÄÉú³ÉÊ½£¨µ¥Ìõ£©
- *		str :	Òª²åÈëµÄÉú³ÉÊ½
+ *	åœ¨è§„åˆ™ä¸­æ’å…¥æ–°çš„ç”Ÿæˆå¼ï¼ˆå•æ¡ï¼‰
+ *		str :	è¦æ’å…¥çš„ç”Ÿæˆå¼
  */
 void Express::insert(string str)
 {
@@ -98,7 +98,7 @@ void Express::insert(string str)
 }
 
 /*
- *	É¾³ıµÚnÌõÉú³ÉÊ½
+ *	åˆ é™¤ç¬¬næ¡ç”Ÿæˆå¼
  */
 string Express::del(int n)
 {
@@ -116,7 +116,7 @@ string Express::del(int n)
 }
 
 /*
- *	½«Éú³ÉÊ½ÖĞµÄe±êÊ¶·û£¬ÓÃeÖĞµÄÉú³ÉÊı×éÌæ»»
+ *	å°†ç”Ÿæˆå¼ä¸­çš„eæ ‡è¯†ç¬¦ï¼Œç”¨eä¸­çš„ç”Ÿæˆæ•°ç»„æ›¿æ¢
  */
 void Express::replace(Express e)
 {
@@ -139,7 +139,7 @@ void Express::replace(Express e)
 }
 
 /*
- *	ÅĞ¶Ïµ±Ç°¹æÔòÊÇ·ñÄÜº¬ÓĞ¿Õ´®
+ *	åˆ¤æ–­å½“å‰è§„åˆ™æ˜¯å¦èƒ½å«æœ‰ç©ºä¸²
  */
 bool Express::haveEmptyStr()
 {
@@ -157,7 +157,7 @@ void Express::print()
 	{
 		cout<<this->ident<<" -> ";
 		if(data[i][0] == 0)
-			cout<<"¦Å"<<endl;
+			cout<<"Îµ"<<endl;
 		else
 			cout<<data[i]<<endl;
 	}
@@ -165,43 +165,43 @@ void Express::print()
 
 /*===================================================================================*/
 
-class Grammer	//ÎÄ·¨
+class Grammer	//æ–‡æ³•
 {
 
 public:
-	vector<Express> expresses;	//¹æÔò¼¯ºÏ
+	vector<Express> expresses;	//è§„åˆ™é›†åˆ
 
 	Grammer(){}
 
 	void print();
 
-	// ÅĞ¶ÏÄ³Ò»¸ö¹æÔòÊÇ·ñÄÜ¹»µ¼³ö¿Õ´®
+	// åˆ¤æ–­æŸä¸€ä¸ªè§„åˆ™æ˜¯å¦èƒ½å¤Ÿå¯¼å‡ºç©ºä¸²
 	bool isEmptyStr(Express e);
 	bool isEmptyStr(string str);
 
-	// ¸ù¾İ¹æÔò±êÊ¶·û²éÕÒ¹æÔò
+	// æ ¹æ®è§„åˆ™æ ‡è¯†ç¬¦æŸ¥æ‰¾è§„åˆ™
 	Express findExpress(char C);
 
-	// Ïû³ıÎÄ·¨GÖĞµÄ×óµİ¹é
+	// æ¶ˆé™¤æ–‡æ³•Gä¸­çš„å·¦é€’å½’
 	void removeLeftRecursion();
 
-	// »ñÈ¡Óï·¨GµÄFIRST¼¯ºÏ
+	// è·å–è¯­æ³•Gçš„FIRSTé›†åˆ
 	vector<char> getFirstChar(char A);
 	vector<char> *getFIRST();
 
-	// »ñÈ¡FOLLOW¼¯ºÏ
+	// è·å–FOLLOWé›†åˆ
 	vector<char> getFollowChar(char A,int x,vector<char> *fs);
 	vector<char> *getFOLLOW();
 
-	// »ñÈ¡SELECT¼¯ºÏ
+	// è·å–SELECTé›†åˆ
 	vector<char> *getSELECT(vector<char> *follow);
 
-	// »ñÈ¡ÎÄ·¨µÄÔ¤²â·ÖÎö±í
+	// è·å–æ–‡æ³•çš„é¢„æµ‹åˆ†æè¡¨
 	void getMTable();
 
-	// ´òÓ¡FIRST¼¯ºÏ»òFOLLOW¼¯ºÏ
+	// æ‰“å°FIRSTé›†åˆæˆ–FOLLOWé›†åˆ
 	void printCollection(vector<char> list[]);
-	// ´òÓ¡SELECT¼¯ºÏ
+	// æ‰“å°SELECTé›†åˆ
 	void printSELECT(vector<char> list[]);
 
 };
@@ -221,7 +221,7 @@ void Grammer::print()
 }
 
 /*
- *	¸ù¾İ¹æÔò±êÊ¶·û²éÕÒ¹æÔò
+ *	æ ¹æ®è§„åˆ™æ ‡è¯†ç¬¦æŸ¥æ‰¾è§„åˆ™
  */
 Express Grammer::findExpress(char C)
 {
@@ -234,7 +234,7 @@ Express Grammer::findExpress(char C)
 }
 
 /*
- *	 ÅĞ¶ÏÄ³Ò»¸ö¹æÔòÊÇ·ñÄÜ¹»µ¼³ö¿Õ´®
+ *	 åˆ¤æ–­æŸä¸€ä¸ªè§„åˆ™æ˜¯å¦èƒ½å¤Ÿå¯¼å‡ºç©ºä¸²
  */
 bool Grammer::isEmptyStr(Express e)
 {
@@ -256,7 +256,7 @@ bool Grammer::isEmptyStr(Express e)
 }
 
 /*
- *	 ÅĞ¶ÏÄ³Ò»¸öÉú³ÉÊ½ÊÇ·ñÄÜ¹»µ¼³ö¿Õ´®
+ *	 åˆ¤æ–­æŸä¸€ä¸ªç”Ÿæˆå¼æ˜¯å¦èƒ½å¤Ÿå¯¼å‡ºç©ºä¸²
  */
 bool Grammer::isEmptyStr(string str)
 {
@@ -275,14 +275,14 @@ bool Grammer::isEmptyStr(string str)
 }
 	
 /*
- *	Ïû³ıÎÄ·¨GÖĞµÄ×óµİ¹é
+ *	æ¶ˆé™¤æ–‡æ³•Gä¸­çš„å·¦é€’å½’
  */
 void Grammer::removeLeftRecursion()
 {
 	/*
 	for(int i=0;i<G.expresses.size();i++)
 	{
-		// Ìæ»»
+		// æ›¿æ¢
 		for(int j=1;j<(G.expresses.size()-1);j++)
 		{
 			Express e1 = G.expresses[i];
@@ -293,28 +293,28 @@ void Grammer::removeLeftRecursion()
 	}
 	*/	
 
-	// Ïû³ıÖ±½Ó×óµİ¹é
-	for(int i=0;i<expresses.size();i++)	//±éÀúÃ¿Ò»Ìõ¹æÔò
+	// æ¶ˆé™¤ç›´æ¥å·¦é€’å½’
+	for(int i=0;i<expresses.size();i++)	//éå†æ¯ä¸€æ¡è§„åˆ™
 	{
 		Express e = expresses[i];
-		for(int j=0;j<e.length;j++)		//±éÀúÃ¿Ò»ÌõÉú³ÉÊ½
+		for(int j=0;j<e.length;j++)		//éå†æ¯ä¸€æ¡ç”Ÿæˆå¼
 		{
 			string str = e.data[j];
-			if(str[0] == e.ident)		//Éú³ÉÊ½ÓÒ²¿µÄÊ××ÖÄ¸ºÍÉú³ÉÊ½×ó²¿ÏàÍ¬£¬º¬ÓĞ×óµİ¹é
+			if(str[0] == e.ident)		//ç”Ÿæˆå¼å³éƒ¨çš„é¦–å­—æ¯å’Œç”Ÿæˆå¼å·¦éƒ¨ç›¸åŒï¼Œå«æœ‰å·¦é€’å½’
 			{
-				// ²úÉúÒ»¸öĞÂ¹æÔò
-				Express f(e.ident-1);				//ĞÂ¹æÔòµÄ×ó²¿
-				string *f_str = new string[2];		//ĞÂ¹æÔòµÄÉú³ÉÊ½
+				// äº§ç”Ÿä¸€ä¸ªæ–°è§„åˆ™
+				Express f(e.ident-1);				//æ–°è§„åˆ™çš„å·¦éƒ¨
+				string *f_str = new string[2];		//æ–°è§„åˆ™çš„ç”Ÿæˆå¼
 
 				for(int k=0;k<e.length;k++)	
 				{
-					e.data[k] += f.ident;		//ÔÚ¾É¹æÔòÃ¿Ò»ÌõÉú³ÉÊ½ºó£¬¼ÓÈëĞÂ¹æÔòµÄ×ó²¿±êÊ¶·û
+					e.data[k] += f.ident;		//åœ¨æ—§è§„åˆ™æ¯ä¸€æ¡ç”Ÿæˆå¼åï¼ŒåŠ å…¥æ–°è§„åˆ™çš„å·¦éƒ¨æ ‡è¯†ç¬¦
 				}
 
 				string tmp = e.del(j);
-				f_str[0] = string(tmp,1,tmp.length());	//¾É¹æÔòÖĞº¬ÓĞ×óµİ¹éµÄÉú³ÉÊ½£¬È¥³ı×óµİ¹éºó£¬·ÅÈëĞÂ¹æÔòÖĞ
+				f_str[0] = string(tmp,1,tmp.length());	//æ—§è§„åˆ™ä¸­å«æœ‰å·¦é€’å½’çš„ç”Ÿæˆå¼ï¼Œå»é™¤å·¦é€’å½’åï¼Œæ”¾å…¥æ–°è§„åˆ™ä¸­
 
-				char c = 0;		// ¿Õ×Ö·û ¦Å
+				char c = 0;		// ç©ºå­—ç¬¦ Îµ
 				f_str[1] = c;
 
 				f.insert(f_str,2);
@@ -327,26 +327,26 @@ void Grammer::removeLeftRecursion()
 }
 
 /*
- *	²éÕÒ·ÇÖÕ½á·ûAµÄËùÓĞFRIST×Ö·û¼¯ºÏ
- *			·µ»ØcharÀàĞÍµÄvector¼¯ºÏ
+ *	æŸ¥æ‰¾éç»ˆç»“ç¬¦Açš„æ‰€æœ‰FRISTå­—ç¬¦é›†åˆ
+ *			è¿”å›charç±»å‹çš„vectoré›†åˆ
  */
 vector<char> Grammer::getFirstChar(char A)
 {
 	vector<char> first;
-	for(int i=0;i<expresses.size();i++)		//±éÀúÃ¿Ò»Ìõ¹æÔò
+	for(int i=0;i<expresses.size();i++)		//éå†æ¯ä¸€æ¡è§„åˆ™
 	{
 		Express e = expresses[i];
 		if(A == e.ident)
 		{
-			for(int j=0;j<e.length;j++)			//±éÀúÃ¿Ò»ÌõÉú³ÉÊ½
+			for(int j=0;j<e.length;j++)			//éå†æ¯ä¸€æ¡ç”Ÿæˆå¼
 			{
 				string str = e.data[j];
-				// Èç¹ûÎªÖÕ½á·û»ò¿Õ×Ö·û
+				// å¦‚æœä¸ºç»ˆç»“ç¬¦æˆ–ç©ºå­—ç¬¦
 				if(inVector(Vt,str[0]) || str[0] == 0)
 					first.push_back(str[0]);
 				else
 				{
-					//µİ¹é²éÑ¯£¬²¢°Ñ²éÑ¯½á¹ûÑ¹Èë½á¹û¼¯ÖĞ
+					//é€’å½’æŸ¥è¯¢ï¼Œå¹¶æŠŠæŸ¥è¯¢ç»“æœå‹å…¥ç»“æœé›†ä¸­
 					vector<char> f =getFirstChar(str[0]); 
 					for(int k=0;k<f.size();k++)
 						first.push_back(f[k]);
@@ -360,7 +360,7 @@ vector<char> Grammer::getFirstChar(char A)
 }
 
 /*
- *	»ñÈ¡Óï·¨GµÄFIRST¼¯ºÏ
+ *	è·å–è¯­æ³•Gçš„FIRSTé›†åˆ
  */
 vector<char> *Grammer::getFIRST()
 {
@@ -372,13 +372,13 @@ vector<char> *Grammer::getFIRST()
 
 		for(int j=0;j<e.length;j++)
 		{
-			// Öğ²ã±éÀú£¬Èç¹ûÉú³ÉÊ½µÄÊ××ÖÄ¸ÎªÖÕ½á·û£¬»ò¿Õ×Ö·û¡£
+			// é€å±‚éå†ï¼Œå¦‚æœç”Ÿæˆå¼çš„é¦–å­—æ¯ä¸ºç»ˆç»“ç¬¦ï¼Œæˆ–ç©ºå­—ç¬¦ã€‚
 			string str = e.data[j];
 			if(inVector(Vt,str[0]) || str[0] == 0)
 				first[i].push_back(str[0]);
 			else
 			{
-				//µİ¹é²éÑ¯£¬²¢°Ñ²éÑ¯½á¹ûÑ¹Èëµ±Ç°FIRST¼¯ÖĞ
+				//é€’å½’æŸ¥è¯¢ï¼Œå¹¶æŠŠæŸ¥è¯¢ç»“æœå‹å…¥å½“å‰FIRSTé›†ä¸­
 				vector<char> f = getFirstChar(str[0]); 
 				for(int k=0;k<f.size();k++)
 					first[i].push_back(f[k]);
@@ -389,10 +389,10 @@ vector<char> *Grammer::getFIRST()
 }
 
 /*
- *	²éÑ¯±êÊ¶·ûAµÄFOLLOW×Ö·û¼¯
- *			A£º	Òª²éÑ¯µÄ±êÊ¶·û
- *			x£º	µ±Ç°µÄÒÑ¾­²é³öµÄFOLLOW¼¯ºÏµÄ³¤¶È
- *			fs£ºÒÑ¾­²é³öµÄFOLLOW¼¯ºÏ
+ *	æŸ¥è¯¢æ ‡è¯†ç¬¦Açš„FOLLOWå­—ç¬¦é›†
+ *			Aï¼š	è¦æŸ¥è¯¢çš„æ ‡è¯†ç¬¦
+ *			xï¼š	å½“å‰çš„å·²ç»æŸ¥å‡ºçš„FOLLOWé›†åˆçš„é•¿åº¦
+ *			fsï¼šå·²ç»æŸ¥å‡ºçš„FOLLOWé›†åˆ
  */
 vector<char> Grammer::getFollowChar(char A,int x,vector<char> *fs)
 {
@@ -404,28 +404,28 @@ vector<char> Grammer::getFollowChar(char A,int x,vector<char> *fs)
 		{
 			string str = e2.data[j];
 
-			int n = str.find(A);		//ÔÚËùÓĞÉú³ÉÊ½ÓÒ²¿Ñ°ÕÒC
-			if(n == -1 || A == e2.ident)		//ÕÒ²»µ½£¬»òÕßÉú³ÉÊ½ÎªÆä×ÔÉí¹æÔò
+			int n = str.find(A);		//åœ¨æ‰€æœ‰ç”Ÿæˆå¼å³éƒ¨å¯»æ‰¾C
+			if(n == -1 || A == e2.ident)		//æ‰¾ä¸åˆ°ï¼Œæˆ–è€…ç”Ÿæˆå¼ä¸ºå…¶è‡ªèº«è§„åˆ™
 				continue;
-			else if(n == (str.size()-1))		//ÔÚÆäËû²úÉúÊ½ÖĞÕÒµ½ÕÒµ½£¬ÇÒÎªÓÒ²¿×îºó
+			else if(n == (str.size()-1))		//åœ¨å…¶ä»–äº§ç”Ÿå¼ä¸­æ‰¾åˆ°æ‰¾åˆ°ï¼Œä¸”ä¸ºå³éƒ¨æœ€å
 			{
 				vector<char> f = findVector(e2.ident,x,fs);
 				for(int k=1;k<f.size();k++)
 				{
-					if(f[k] != 0 && !inVector(follow,f[k]))		//È¥³ıÆäÖĞµÄ¿Õ´®£¬ÒÔ¼°ÏàÍ¬ÄÚÈİ
+					if(f[k] != 0 && !inVector(follow,f[k]))		//å»é™¤å…¶ä¸­çš„ç©ºä¸²ï¼Œä»¥åŠç›¸åŒå†…å®¹
 						follow.push_back(f[k]);
 				}
 			}
 			else
 			{
-				if(inVector(Vt,str[n+1]))			//½ôºóµÄÎªÖÕ½á·û
+				if(inVector(Vt,str[n+1]))			//ç´§åçš„ä¸ºç»ˆç»“ç¬¦
 					follow.push_back(str[n+1]);
-				else			//·ÇÖÕ½á·û£¬»ñÈ¡ÆäFIRST¼¯ºÏ
+				else			//éç»ˆç»“ç¬¦ï¼Œè·å–å…¶FIRSTé›†åˆ
 				{
 					vector<char> f = getFirstChar(str[n+1]);
 					for(int k=0;k<f.size();k++)
 					{
-						if(f[k] != 0 && !inVector(follow,f[k]))		//È¥³ı¿Õ´®ÓëÏàÍ¬
+						if(f[k] != 0 && !inVector(follow,f[k]))		//å»é™¤ç©ºä¸²ä¸ç›¸åŒ
 							follow.push_back(f[k]);
 					}
 					if(inVector(f,0))
@@ -445,7 +445,7 @@ vector<char> Grammer::getFollowChar(char A,int x,vector<char> *fs)
 }
 
 /*
- *  »ñÈ¡FOLLOW¼¯ºÏ
+ *  è·å–FOLLOWé›†åˆ
  */
 vector<char> *Grammer::getFOLLOW()
 {
@@ -455,23 +455,23 @@ vector<char> *Grammer::getFOLLOW()
 		Express e1 = expresses[i];
 		follow[i].push_back(e1.ident);
 
-		// ÒÀ´Î»ñÈ¡FOLLOW¼¯ºÏ²¢´æÈëfollowÖĞ
+		// ä¾æ¬¡è·å–FOLLOWé›†åˆå¹¶å­˜å…¥followä¸­
 		vector<char> f = getFollowChar(e1.ident,i,follow);
 		for(int l=0;l<f.size();l++)
 			follow[i].push_back(f[l]);
 
-		if(!inVector(follow[i],'#'))	//Ìí¼Ó# ºÅ
+		if(!inVector(follow[i],'#'))	//æ·»åŠ # å·
 			follow[i].push_back('#');
 	}
 	return follow;
 }
 
 /*
- *  »ñÈ¡SELECT¼¯ºÏ
+ *  è·å–SELECTé›†åˆ
  */
 vector<char> *Grammer::getSELECT(vector<char> *follow)
 {
-	// SELECT¼¯ºÏµÄÊı×é³¤¶È
+	// SELECTé›†åˆçš„æ•°ç»„é•¿åº¦
 	int length = 0;
 	for(int i=0;i<expresses.size();i++)
 		length += expresses[i].length;
@@ -484,28 +484,28 @@ vector<char> *Grammer::getSELECT(vector<char> *follow)
 		Express e = expresses[i];
 		for(int j=0;j<e.length;j++)
 		{
-			vector<char> v = getFirstChar(e.data[j][0]);	//»ñÈ¡Éú³ÉÊ½ÓÒ²¿µÄFIRST¼¯ºÏ
+			vector<char> v = getFirstChar(e.data[j][0]);	//è·å–ç”Ÿæˆå¼å³éƒ¨çš„FIRSTé›†åˆ
 
-			if(isEmptyStr(e.data[j]))	//Èç¹ûÉú³ÉÊ½ÓÒ²¿¿ÉÒÔÍÆµ¼³ö¿Õ´®
+			if(isEmptyStr(e.data[j]))	//å¦‚æœç”Ÿæˆå¼å³éƒ¨å¯ä»¥æ¨å¯¼å‡ºç©ºä¸²
 			{
 				vector<char> f;
 				for(int k=0;k<expresses.size();k++)
 				{
 					if(follow[k][0] == e.ident)
-						f = follow[k];		//ÕÒµ½Éú³ÉÊ½×ó²¿µÄFOLLOW¼¯ºÏ
+						f = follow[k];		//æ‰¾åˆ°ç”Ÿæˆå¼å·¦éƒ¨çš„FOLLOWé›†åˆ
 				}
-				for(k=0;k<v.size();k++)	//½«FIRST¼¯ºÏÑ¹Èë
+				for(k=0;k<v.size();k++)	//å°†FIRSTé›†åˆå‹å…¥
 				{
 					if(!inVector(select[n],v[k]) && v[k]!=0)
 						select[n].push_back(v[k]);
 				}
-				for(k=1;k<f.size();k++)	//½«FOLLOW¼¯ºÏÑ¹Èë
+				for(k=1;k<f.size();k++)	//å°†FOLLOWé›†åˆå‹å…¥
 				{
 					if(!inVector(select[n],f[k]) && f[k]!=0)
 						select[n].push_back(f[k]);
 				}
 			}
-			else		//Éú³ÉÊ½ÓÒ²¿²»ÄÜÍÆµ¼³ö¿Õ´®£¬½«Éú³ÉÊ½ÓÒ²¿µÄFIRST¼¯ºÏÑ¹Èë
+			else		//ç”Ÿæˆå¼å³éƒ¨ä¸èƒ½æ¨å¯¼å‡ºç©ºä¸²ï¼Œå°†ç”Ÿæˆå¼å³éƒ¨çš„FIRSTé›†åˆå‹å…¥
 			{
 				for(int k=0;k<v.size();k++)
 				{
@@ -521,38 +521,38 @@ vector<char> *Grammer::getSELECT(vector<char> *follow)
 
 void Grammer::getMTable()
 {
-	//Ïû³ı×óµİ¹é
+	//æ¶ˆé™¤å·¦é€’å½’
 	removeLeftRecursion();
-	cout<<"Ïû³ı×óµİ¹éºó£º"<<endl;
+	cout<<"æ¶ˆé™¤å·¦é€’å½’åï¼š"<<endl;
 	print();
 
-	//»ñÈ¡FIST¼¯ºÏ
+	//è·å–FISTé›†åˆ
 	vector<char> *first = getFIRST();
-	cout<<"FIRST ¼¯ºÏ£º"<<endl;
+	cout<<"FIRST é›†åˆï¼š"<<endl;
 	printCollection(first);
 	cout<<endl;
 
-	//»ñÈ¡FOLLOW¼¯ºÏ
+	//è·å–FOLLOWé›†åˆ
 	vector<char> *follow = getFOLLOW();
-	cout<<"FOLLOW ¼¯ºÏ£º"<<endl;
+	cout<<"FOLLOW é›†åˆï¼š"<<endl;
 	printCollection(follow);
 	cout<<endl;
 
-	//»ñÈ¡SELECT¼¯ºÏ
+	//è·å–SELECTé›†åˆ
 	vector<char> *select = getSELECT(follow);
-	cout<<"SELECT ¼¯ºÏ£º"<<endl;
+	cout<<"SELECT é›†åˆï¼š"<<endl;
 	printSELECT(select);
 	cout<<endl;
 
-	// Éú³ÉÔ¤²â·ÖÎö±í
+	// ç”Ÿæˆé¢„æµ‹åˆ†æè¡¨
 	M[0][0] = "";
 
 	for(int i=1;i<col;i++)
-		M[0][i] = Vt[i-1];		//±íÍ·ÖÕ½á·û
+		M[0][i] = Vt[i-1];		//è¡¨å¤´ç»ˆç»“ç¬¦
 	M[0][col-1] = "#";
 
 	for(i=1;i<row;i++)
-		M[i][0] = expresses[i-1].ident; //±íÍ··ÇÖÕ½á·û
+		M[i][0] = expresses[i-1].ident; //è¡¨å¤´éç»ˆç»“ç¬¦
 
 	int n = 0;
 	for(i=0;i<expresses.size();i++)
@@ -561,15 +561,15 @@ void Grammer::getMTable()
 		for(int j=1;j<col;j++)
 		{
 			M[i+1][j] = "";
-			const char *b = M[0][j].c_str();	//ÌáÈ¡Ê××Ö·û
+			const char *b = M[0][j].c_str();	//æå–é¦–å­—ç¬¦
 			char c = *b;
 
-			int m = n;			//×¢£º´Ë´¦m×÷ÓÃÎª¾Ö²¿±éÀúselect¼¯ºÏ
+			int m = n;			//æ³¨ï¼šæ­¤å¤„mä½œç”¨ä¸ºå±€éƒ¨éå†selecté›†åˆ
 			for(int k=0;k<e.length;k++)
 			{
 				for(int l=0;l<select[m].size();l++)
 				{
-					if(select[m][l] == c)		//Èç¹ûµ±Ç°select¼¯ÖĞº¬ÓĞ±íÍ·ÖÕ½á·û
+					if(select[m][l] == c)		//å¦‚æœå½“å‰selecté›†ä¸­å«æœ‰è¡¨å¤´ç»ˆç»“ç¬¦
 						M[i+1][j] = e.data[k];
 				}
 				m++;
@@ -581,7 +581,7 @@ void Grammer::getMTable()
 }
 
 /*
- *	´òÓ¡¼¯ºÏ(FIRST»òFOLLOW)
+ *	æ‰“å°é›†åˆ(FIRSTæˆ–FOLLOW)
  */
 void Grammer::printCollection(vector<char> list[])
 {
@@ -592,7 +592,7 @@ void Grammer::printCollection(vector<char> list[])
 		{
 			if(list[i][j]==0)
 			{
-				cout<<"¦Å"<<"  ";
+				cout<<"Îµ"<<"  ";
 			}
 			else
 			{
@@ -604,7 +604,7 @@ void Grammer::printCollection(vector<char> list[])
 }
 
 /*
- *	´òÓ¡SELECT¼¯ºÏ
+ *	æ‰“å°SELECTé›†åˆ
  */
 void Grammer::printSELECT(vector<char> select[])
 {
@@ -617,7 +617,7 @@ void Grammer::printSELECT(vector<char> select[])
 			cout<<e.ident<<" -> ";
 
 			if(e.data[j][0] == 0)
-				cout<<"¦Å"<<" :\t ";
+				cout<<"Îµ"<<" :\t ";
 			else
 				cout<<e.data[j]<<" :\t ";
 
